@@ -49,6 +49,17 @@
       },
       "block_order": ["b1", "b2", "b3"]
     },
+    "ugc": {
+      "type": "ugc-video",
+      "settings": { "eyebrow": "#LUMAglow", "heading": "Loved & shared by you" },
+      "blocks": {
+        "v1": { "type": "video", "settings": { "caption": "@glowgirl" } },
+        "v2": { "type": "video", "settings": { "caption": "@skindiary" } },
+        "v3": { "type": "video", "settings": { "caption": "@dewyroutine" } },
+        "v4": { "type": "video", "settings": { "caption": "@morningglow" } }
+      },
+      "block_order": ["v1", "v2", "v3", "v4"]
+    },
     "reviews": {
       "type": "reviews",
       "blocks": {
@@ -57,6 +68,17 @@
         "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth it", "text": "Gentle and effective." } }
       },
       "block_order": ["r1", "r2", "r3"]
+    },
+    "clinical": {
+      "type": "clinical-results",
+      "settings": { "gradient": true },
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "94", "suffix": "%", "label": "saw smoother, plumper skin" } },
+        "s2": { "type": "stat", "settings": { "number": "89", "suffix": "%", "label": "reported a visible glow" } },
+        "s3": { "type": "stat", "settings": { "number": "96", "suffix": "%", "label": "would recommend to a friend" } },
+        "s4": { "type": "stat", "settings": { "number": "72", "suffix": "hr", "label": "of continuous hydration" } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"]
     },
     "faq": {
       "type": "faq",
@@ -68,5 +90,5 @@
       "block_order": ["q1", "q2"]
     }
   },
-  "order": ["hero", "trust", "featured", "benefits", "reviews", "faq"]
+  "order": ["hero", "trust", "featured", "benefits", "ugc", "reviews", "clinical", "faq"]
 }
