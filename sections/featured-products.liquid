@@ -1,8 +1,5 @@
 {%- liquid
-  assign collection = collections[section.settings.collection]
-  if collection == empty or section.settings.collection == blank
-    assign collection = collections.all
-  endif
+  assign collection = section.settings.collection
   assign products = collection.products
 -%}
 <div id="{{ section.settings.anchor | default: 'featured' }}" class="section fp {% if section.settings.gradient %}bg-gradient{% endif %}">

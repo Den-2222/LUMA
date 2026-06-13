@@ -9,7 +9,7 @@
     <div class="grid bundles__grid" data-reveal-group>
       {%- for block in section.blocks -%}
         {%- liquid
-          assign bundle_product = all_products[block.settings.product]
+          assign bundle_product = block.settings.product
           assign variant = bundle_product.selected_or_first_available_variant
           assign price = block.settings.price_override | default: variant.price
           assign compare = block.settings.compare_override | default: variant.compare_at_price

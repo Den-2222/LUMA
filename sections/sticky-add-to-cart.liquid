@@ -1,6 +1,6 @@
 {%- liquid
   if section.settings.product != blank
-    assign product = all_products[section.settings.product]
+    assign product = section.settings.product
   elsif template.name == 'product'
     assign product = product
   endif
