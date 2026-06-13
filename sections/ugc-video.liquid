@@ -16,7 +16,7 @@
           {%- elsif block.settings.poster != blank -%}
             <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | escape }}">
           {%- else -%}
-            {{ 'collection-1' | placeholder_svg_tag }}
+            {{ 'lifestyle-2' | placeholder_svg_tag }}
           {%- endif -%}
           {%- if block.settings.video != blank or block.settings.video_url != blank -%}
             <button class="ugc__play" data-ugc-play aria-label="Play">{% render 'icon', name: 'play', size: 40 %}</button>

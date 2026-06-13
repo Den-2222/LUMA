@@ -1,27 +1,24 @@
-<section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.dark %}{% endif %}"
-  style="{% if section.settings.dark %}background:{{ section.settings.dark_bg }};color:#fff;{% endif %}">
+<section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.bg_surface %}bg-surface{% endif %}">
   <div class="page-width">
-    {%- if section.settings.heading != blank -%}
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
       <div class="section-header text-center" data-reveal-group>
         {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
-        <h2 data-reveal>{{ section.settings.heading }}</h2>
-        {%- if section.settings.subheading != blank -%}<p data-reveal class="{% unless section.settings.dark %}text-muted{% endunless %}">{{ section.settings.subheading }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.subheading != blank -%}<p class="text-muted" data-reveal>{{ section.settings.subheading }}</p>{%- endif -%}
       </div>
     {%- endif -%}
 
     <div class="grid stats__grid" data-reveal-group>
       {%- for block in section.blocks -%}
         <div class="stat" data-reveal {{ block.shopify_attributes }}>
-          <span class="stat__num">
-            {%- if block.settings.prefix != blank %}{{ block.settings.prefix }}{% endif -%}
-            <span data-countup="{{ block.settings.number }}">0</span>{%- if block.settings.suffix != blank %}<span class="stat__suffix">{{ block.settings.suffix }}</span>{% endif -%}
-          </span>
-          <p class="stat__label {% if section.settings.dark %}{% else %}text-muted{% endif %}">{{ block.settings.label }}</p>
+          <span class="stat__num">{{ block.settings.prefix }}<span data-countup="{{ block.settings.number }}">0</span><span class="stat__suffix">{{ block.settings.suffix }}</span></span>
+          <p class="stat__label text-muted">{{ block.settings.label }}</p>
         </div>
       {%- endfor -%}
     </div>
+
     {%- if section.settings.note != blank -%}
-      <p class="text-center {% unless section.settings.dark %}text-muted{% endunless %}" data-reveal style="font-size:.78rem;margin-top:2rem;opacity:.7;">{{ section.settings.note }}</p>
+      <p class="text-center text-muted" data-reveal style="font-size:.78rem;margin-top:2rem;opacity:.7;">{{ section.settings.note }}</p>
     {%- endif -%}
   </div>
 </section>
@@ -36,22 +33,30 @@
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "In an independent consumer study over 8 weeks." },
     { "type": "text", "id": "note", "label": "Footnote", "default": "*Based on a 120-participant consumer perception study." },
     { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": true },
-    { "type": "checkbox", "id": "dark", "label": "Dark background", "default": false },
-    { "type": "color", "id": "dark_bg", "label": "Dark background color", "default": "#2b2326" }
+    { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": false }
   ],
-  "blocks": [{
-    "type": "stat", "name": "Statistic", "settings": [
-      { "type": "text", "id": "prefix", "label": "Prefix", "default": "" },
-      { "type": "text", "id": "number", "label": "Number", "info": "Numbers only, e.g. 94 or 4.8", "default": "94" },
-      { "type": "text", "id": "suffix", "label": "Suffix", "default": "%" },
-      { "type": "text", "id": "label", "label": "Label", "default": "saw smoother, plumper skin" }
-    ]
-  }],
-  "presets": [{ "name": "Clinical results", "blocks": [
-    {"type":"stat","settings":{"number":"94","suffix":"%","label":"saw smoother, plumper skin"}},
-    {"type":"stat","settings":{"number":"89","suffix":"%","label":"reported a visible glow"}},
-    {"type":"stat","settings":{"number":"96","suffix":"%","label":"would recommend to a friend"}},
-    {"type":"stat","settings":{"number":"72","suffix":"hr","label":"of continuous hydration"}}
-  ]}]
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistic",
+      "settings": [
+        { "type": "text", "id": "prefix", "label": "Prefix" },
+        { "type": "text", "id": "number", "label": "Number", "info": "Numbers only, e.g. 94 or 4.8", "default": "94" },
+        { "type": "text", "id": "suffix", "label": "Suffix", "default": "%" },
+        { "type": "text", "id": "label", "label": "Label", "default": "saw smoother, plumper skin" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Clinical results",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "94", "suffix": "%", "label": "saw smoother, plumper skin" } },
+        { "type": "stat", "settings": { "number": "89", "suffix": "%", "label": "reported a visible glow" } },
+        { "type": "stat", "settings": { "number": "96", "suffix": "%", "label": "would recommend to a friend" } },
+        { "type": "stat", "settings": { "number": "72", "suffix": "hr", "label": "of continuous hydration" } }
+      ]
+    }
+  ]
 }
 {% endschema %}
