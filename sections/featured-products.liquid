@@ -1,0 +1,67 @@
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  if collection == empty or section.settings.collection == blank
+    assign collection = collections.all
+  endif
+  assign products = collection.products
+-%}
+<div id="{{ section.settings.anchor | default: 'featured' }}" class="section fp {% if section.settings.gradient %}bg-gradient{% endif %}">
+  <div class="page-width">
+    <div class="section-header text-center" data-reveal-group style="margin-bottom:2.5rem;">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.subheading != blank -%}<p class="text-muted" data-reveal>{{ section.settings.subheading }}</p>{%- endif -%}
+    </div>
+
+    <div class="fp__viewport" data-carousel>
+      {%- if section.settings.layout == 'carousel' -%}
+        <button class="fp__arrow fp__arrow--prev" data-carousel-prev aria-label="Previous">{% render 'icon', name: 'arrow', size: 22 %}</button>
+        <button class="fp__arrow fp__arrow--next" data-carousel-next aria-label="Next">{% render 'icon', name: 'arrow', size: 22 %}</button>
+      {%- endif -%}
+
+      <div class="fp__track {% if section.settings.layout == 'grid' %}fp__track--grid{% endif %}" data-carousel-track data-reveal-group>
+        {%- if products.size > 0 -%}
+          {%- for product in products limit: section.settings.limit -%}
+            {% render 'product-card', product: product, reveal: true %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            {%- assign pi = i | modulo: 6 | plus: 1 -%}
+            <div class="card card--product" data-reveal>
+              <div class="card__media media media--portrait">{{ 'product-' | append: pi | placeholder_svg_tag }}</div>
+              <div class="card__body"><span class="card__title">Product title</span><span class="price">$00.00</span></div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="text-center" data-reveal style="margin-top:2.5rem;">
+        <a href="{{ section.settings.button_link | default: collection.url }}" class="btn btn--secondary btn--large">{{ section.settings.button_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Shop the collection" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The LUMA edit" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Our hero formulas, loved by thousands." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to show all products." },
+    { "type": "range", "id": "limit", "label": "Max products", "min": 2, "max": 12, "step": 1, "default": 8 },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+      { "value": "carousel", "label": "Carousel (scroll + arrows)" },
+      { "value": "grid", "label": "Grid" }
+    ], "default": "carousel" },
+    { "type": "text", "id": "anchor", "label": "Anchor ID", "info": "Used by the hero scroll button.", "default": "featured" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all" },
+    { "type": "url", "id": "button_link", "label": "Button link (blank = collection)" },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "presets": [{ "name": "Featured products" }]
+}
+{% endschema %}

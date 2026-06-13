@@ -1,5 +1,8 @@
 /* ==========================================================================
    LUMA — core theme behaviors (header, drawers, accordions, sticky, gallery)
+   Delegated (document/window) listeners are bound ONCE at init; element
+   binders are guarded with dataset markers so re-running boot() (e.g. in the
+   Theme Editor or after async section loads) never double-binds handlers.
    ========================================================================== */
 (function () {
   'use strict';
@@ -10,12 +13,13 @@
 
   /* ---------- Page load fade ---------- */
   window.addEventListener('load', () => document.body.classList.add('is-loaded'));
-  // safety: don't keep page invisible if load is slow
   setTimeout(() => document.body.classList.add('is-loaded'), 1200);
 
   /* ---------- Blur-up lazy images ---------- */
   function initLazy() {
     $$('img.lazy-img').forEach((img) => {
+      if (img.dataset.lazyBound) return;
+      img.dataset.lazyBound = '1';
       if (img.complete && img.naturalWidth) { img.classList.add('is-loaded'); return; }
       img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
     });
@@ -39,10 +43,12 @@
   window.LUMA = window.LUMA || {};
   window.LUMA.overlay = { show: showOverlay, hide: hideOverlay };
 
-  /* ---------- Header: scroll direction + shrink ---------- */
+  /* ---------- Header: scroll direction + shrink (bound once) ---------- */
+  let headerBound = false;
   function initHeader() {
     const group = $('.header-group');
-    if (!group) return;
+    if (!group || headerBound) return;
+    headerBound = true;
     let last = 0, ticking = false;
     const threshold = 80;
     function update() {
@@ -64,13 +70,12 @@
   /* ---------- Mobile nav drawer ---------- */
   function initMobileNav() {
     const nav = $('[data-mobile-nav]');
-    if (!nav) return;
-    const open = $$('[data-mobile-nav-open]');
-    const close = $$('[data-mobile-nav-close]', nav).concat($$('[data-mobile-nav-close]'));
+    if (!nav || nav.dataset.bound) return;
+    nav.dataset.bound = '1';
     function openNav() { if (nav.classList.contains('is-open')) return; nav.classList.add('is-open'); showOverlay(); }
     function closeNav() { if (!nav.classList.contains('is-open')) return; nav.classList.remove('is-open'); hideOverlay(); }
-    open.forEach((b) => b.addEventListener('click', openNav));
-    close.forEach((b) => b.addEventListener('click', closeNav));
+    $$('[data-mobile-nav-open]').forEach((b) => b.addEventListener('click', openNav));
+    $$('[data-mobile-nav-close]').forEach((b) => b.addEventListener('click', closeNav));
     overlay?.addEventListener('click', closeNav);
     nav.__close = closeNav;
   }
@@ -78,6 +83,8 @@
   /* ---------- Accordions (FAQ + product) ---------- */
   function initAccordions() {
     $$('[data-accordion]').forEach((acc) => {
+      if (acc.dataset.bound) return;
+      acc.dataset.bound = '1';
       const single = acc.hasAttribute('data-accordion-single');
       $$('.accordion__trigger', acc).forEach((trigger) => {
         trigger.addEventListener('click', () => {
@@ -103,9 +110,24 @@
     });
   }
 
+  /* ---------- Featured products carousel ---------- */
+  function initCarousel() {
+    $$('[data-carousel]').forEach((c) => {
+      if (c.dataset.bound) return;
+      c.dataset.bound = '1';
+      const track = $('[data-carousel-track]', c);
+      if (!track) return;
+      const amount = () => Math.max(track.clientWidth * 0.8, 280);
+      $('[data-carousel-next]', c)?.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
+      $('[data-carousel-prev]', c)?.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
+    });
+  }
+
   /* ---------- Product gallery (thumbs + main swap) ---------- */
   function initGallery() {
     $$('[data-gallery]').forEach((gallery) => {
+      if (gallery.dataset.bound) return;
+      gallery.dataset.bound = '1';
       const main = $('[data-gallery-main]', gallery);
       const thumbs = $$('[data-gallery-thumb]', gallery);
       thumbs.forEach((thumb) => {
@@ -122,11 +144,13 @@
   /* ---------- Variant selection (pills/selects → update price/url/atc) ---------- */
   function initVariants() {
     $$('[data-product-form]').forEach((form) => {
-      const dataEl = $('[data-variant-json]', form.closest('[data-product-root]') || document);
+      if (form.dataset.bound) return;
+      const root = form.closest('[data-product-root]') || document;
+      const dataEl = $('[data-variant-json]', root);
       if (!dataEl) return;
       let variants;
       try { variants = JSON.parse(dataEl.textContent); } catch (e) { return; }
-      const root = form.closest('[data-product-root]') || document;
+      form.dataset.bound = '1';
       const selects = $$('[data-option-index]', root);
       const idInput = $('[name="id"]', form);
 
@@ -145,7 +169,6 @@
           const label = $('[data-atc-label]', atc) || atc;
           label.textContent = v.available ? (window.LUMA.strings.addToCart) : (window.LUMA.strings.soldOut);
         }
-        // sync sticky bar
         document.querySelectorAll('[data-sticky-id]').forEach((el) => { el.value = v.id; });
         document.querySelectorAll('[data-sticky-price]').forEach((el) => { el.innerHTML = renderPrice(v); });
         if (v.featured_image) {
@@ -153,7 +176,6 @@
         }
       }
       selects.forEach((control) => {
-        // pills
         $$('[data-value]', control).forEach((pill) => {
           pill.addEventListener('click', () => {
             $$('[data-value]', control).forEach((p) => p.classList.remove('is-active'));
@@ -162,7 +184,6 @@
             render();
           });
         });
-        // native select
         if (control.tagName === 'SELECT') {
           control.addEventListener('change', () => { control.dataset.value = control.value; render(); });
         }
@@ -188,46 +209,59 @@
   }
   window.LUMA.formatMoney = formatMoney;
 
-  /* ---------- Quantity steppers ---------- */
-  function initSteppers() {
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-qty]');
-      if (!btn) return;
-      const input = $('input', btn.closest('.qty-stepper'));
-      if (!input) return;
-      const dir = btn.dataset.qty === 'plus' ? 1 : -1;
-      const min = parseInt(input.min || '1', 10);
-      input.value = Math.max(min, (parseInt(input.value, 10) || min) + dir);
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-  }
+  /* ---------- Quantity steppers (delegated, bound ONCE) ---------- */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-qty]');
+    if (!btn) return;
+    const input = $('input', btn.closest('.qty-stepper'));
+    if (!input) return;
+    const dir = btn.dataset.qty === 'plus' ? 1 : -1;
+    const min = parseInt(input.min || '1', 10);
+    input.value = Math.max(min, (parseInt(input.value, 10) || min) + dir);
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+
+  /* ---------- Smooth scroll-to-content (hero button / chevron, bound ONCE) ---------- */
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-scroll-next]');
+    if (!trigger) return;
+    e.preventDefault();
+    let target = null;
+    const href = trigger.getAttribute('href');
+    if (href && href.length > 1 && href.startsWith('#')) target = document.getElementById(href.slice(1));
+    if (!target) {
+      const sec = trigger.closest('.shopify-section');
+      target = sec ? sec.nextElementSibling : null;
+    }
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' });
+  });
 
   /* ---------- Sticky add-to-cart bar ---------- */
   function initStickyATC() {
     const bar = $('[data-sticky-atc]');
-    if (!bar) return;
+    if (!bar || bar.dataset.bound) return;
+    bar.dataset.bound = '1';
     const sentinel = $('[data-atc-sentinel]');
     if (sentinel) {
-      // Product page: show bar once the main buy button has scrolled out (upward)
       const io = new IntersectionObserver(([entry]) => {
         const past = entry.boundingClientRect.top < 0;
         bar.classList.toggle('is-visible', !entry.isIntersecting && past);
       }, { threshold: 0 });
       io.observe(sentinel);
     } else {
-      // Other pages (e.g. homepage featured product): show after one viewport
       let ticking = false;
-      const onScroll = () => {
-        bar.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.9);
-        ticking = false;
-      };
+      const onScroll = () => { bar.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.9); ticking = false; };
       window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
     }
   }
 
   /* ---------- UGC video: play on tap, autoplay-in-view ---------- */
   function initUGC() {
-    $$('[data-ugc-item]').forEach((item) => {
+    const items = $$('[data-ugc-item]').filter((i) => !i.dataset.bound);
+    items.forEach((item) => {
+      item.dataset.bound = '1';
       const video = $('video', item);
       const play = $('[data-ugc-play]', item);
       if (!video) return;
@@ -235,7 +269,7 @@
         if (video.paused) { video.play(); play.style.opacity = 0; } else { video.pause(); play.style.opacity = 1; }
       });
     });
-    if (reduced) return;
+    if (reduced || !items.length) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         const v = $('video[data-autoplay]', e.target);
@@ -243,28 +277,25 @@
         if (e.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
       });
     }, { threshold: 0.6 });
-    $$('[data-ugc-item]').forEach((i) => io.observe(i));
+    items.forEach((i) => io.observe(i));
   }
 
-  /* ---------- Newsletter / generic AJAX-less forms keep native behavior ---------- */
-
-  /* ---------- Boot ---------- */
+  /* ---------- Boot (element binders only; all guarded) ---------- */
   function boot() {
     initLazy();
     initHeader();
     initMobileNav();
     initAccordions();
     initMarquee();
+    initCarousel();
     initGallery();
     initVariants();
-    initSteppers();
     initStickyATC();
     initUGC();
   }
   if (document.readyState !== 'loading') boot();
   else document.addEventListener('DOMContentLoaded', boot);
 
-  // Re-init when Theme Editor injects/changes sections
+  // Re-init when Theme Editor injects/changes sections (binders are idempotent)
   document.addEventListener('shopify:section:load', boot);
-  document.addEventListener('shopify:section:select', () => {});
 })();

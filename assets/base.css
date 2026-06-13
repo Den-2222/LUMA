@@ -342,6 +342,41 @@ body.no-scroll { overflow: hidden; }
 }
 
 /* ==========================================================================
+   FEATURED PRODUCTS / CAROUSEL
+   ========================================================================== */
+.fp { scroll-margin-top: 90px; }
+.fp__viewport { position: relative; }
+.fp__track {
+  display: flex; gap: clamp(.8rem, 2vw, 1.4rem); overflow-x: auto; scroll-snap-type: x mandatory;
+  scroll-behavior: smooth; padding-bottom: .5rem; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.fp__track::-webkit-scrollbar { display: none; }
+.fp__track > * { flex: 0 0 clamp(220px, 30%, 320px); scroll-snap-align: start; }
+.fp__track--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); overflow: visible; }
+.fp__track--grid > * { flex: none; }
+.fp__arrow {
+  position: absolute; top: 40%; transform: translateY(-50%); z-index: 5;
+  width: 48px; height: 48px; border-radius: 50%; background: var(--color-surface);
+  box-shadow: var(--shadow-md); display: grid; place-items: center; color: var(--color-text);
+  transition: transform .3s var(--ease-out), background .3s, opacity .3s; opacity: .95;
+}
+.fp__arrow:hover { background: var(--color-accent); color: var(--color-accent-contrast); transform: translateY(-50%) scale(1.08); }
+.fp__arrow--prev { left: -10px; }
+.fp__arrow--prev svg { transform: rotate(180deg); }
+.fp__arrow--next { right: -10px; }
+@media (max-width: 749px) { .fp__arrow { display: none; } }
+
+/* Hero scroll-down indicator */
+.hero__scroll {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 3;
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid currentColor; color: inherit; animation: hero-bob 2s var(--ease-in-out) infinite;
+}
+.hero__scroll svg { transform: rotate(90deg); }
+@keyframes hero-bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
+@media (prefers-reduced-motion: reduce) { .hero__scroll { animation: none; } }
+
+/* ==========================================================================
    BENEFITS
    ========================================================================== */
 .benefits__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }

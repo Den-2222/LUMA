@@ -26,7 +26,11 @@
       {%- if section.settings.button_label != blank or section.settings.button2_label != blank -%}
         <div class="hero__ctas" data-reveal>
           {%- if section.settings.button_label != blank -%}
-            <a href="{{ section.settings.button_link }}" class="btn btn--large">{{ section.settings.button_label }} {% render 'icon', name: 'arrow', size: 18 %}</a>
+            {%- if section.settings.button_scroll -%}
+              <a href="#{{ section.settings.scroll_anchor | default: 'featured' }}" data-scroll-next class="btn btn--large">{{ section.settings.button_label }} {% render 'icon', name: 'arrow', size: 18 %}</a>
+            {%- else -%}
+              <a href="{{ section.settings.button_link }}" class="btn btn--large">{{ section.settings.button_label }} {% render 'icon', name: 'arrow', size: 18 %}</a>
+            {%- endif -%}
           {%- endif -%}
           {%- if section.settings.button2_label != blank -%}
             <a href="{{ section.settings.button2_link }}" class="btn btn--ghost btn--large">{{ section.settings.button2_label }}</a>
@@ -49,6 +53,10 @@
     {{ content }}
   {%- else -%}
     <div class="page-width">{{ content }}</div>
+  {%- endif -%}
+
+  {%- if section.settings.show_scroll_indicator and layout == 'full' -%}
+    <a href="#{{ section.settings.scroll_anchor | default: 'featured' }}" data-scroll-next class="hero__scroll {% if light %}hero__content--light{% endif %}" aria-label="Scroll to content">{% render 'icon', name: 'arrow', size: 20 %}</a>
   {%- endif -%}
 </section>
 
@@ -75,9 +83,12 @@
     { "type": "checkbox", "id": "text_light", "label": "Light text", "default": false },
     { "type": "header", "content": "Buttons" },
     { "type": "text", "id": "button_label", "label": "Primary button", "default": "Shop the glow" },
-    { "type": "url", "id": "button_link", "label": "Primary link" },
+    { "type": "checkbox", "id": "button_scroll", "label": "Primary button scrolls to products", "default": true },
+    { "type": "text", "id": "scroll_anchor", "label": "Scroll target anchor", "info": "Match the Featured products section's Anchor ID.", "default": "featured" },
+    { "type": "url", "id": "button_link", "label": "Primary link (if not scrolling)" },
     { "type": "text", "id": "button2_label", "label": "Secondary button" },
     { "type": "url", "id": "button2_link", "label": "Secondary link" },
+    { "type": "checkbox", "id": "show_scroll_indicator", "label": "Show animated scroll indicator", "default": true },
     { "type": "header", "content": "Animation" },
     { "type": "checkbox", "id": "parallax", "label": "Parallax media (full-bleed)", "default": true },
     { "type": "checkbox", "id": "tilt", "label": "3D tilt (split)", "default": true },
