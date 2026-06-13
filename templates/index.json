@@ -39,75 +39,34 @@
         "button_label": "Shop all"
       }
     },
-    "before-after": {
-      "type": "before-after",
-      "settings": {
-        "eyebrow": "Real results",
-        "heading": "See the difference",
-        "text": "<p>Drag the slider to reveal the transformation after 4 weeks of daily use.</p>"
-      }
-    },
     "benefits": {
       "type": "product-benefits",
       "settings": { "eyebrow": "Why it works", "heading": "Visible results, gentle on skin", "bg_surface": true },
       "blocks": {
         "b1": { "type": "benefit", "settings": { "icon": "drop", "title": "Deep hydration", "text": "72-hour moisture that plumps and softens skin." } },
         "b2": { "type": "benefit", "settings": { "icon": "sparkle", "title": "Visible glow", "text": "A dewy, lit-from-within radiance." } },
-        "b3": { "type": "benefit", "settings": { "icon": "leaf", "title": "Clean formula", "text": "Vegan, cruelty-free, no nasties." } },
-        "b4": { "type": "benefit", "settings": { "icon": "shield", "title": "Barrier support", "text": "Strengthens and protects your skin barrier." } }
+        "b3": { "type": "benefit", "settings": { "icon": "shield", "title": "Barrier support", "text": "Strengthens your skin barrier." } }
       },
-      "block_order": ["b1", "b2", "b3", "b4"]
-    },
-    "ugc": {
-      "type": "ugc-video",
-      "settings": { "eyebrow": "#LUMAglow", "heading": "Loved & shared by you" },
-      "blocks": {
-        "v1": { "type": "video", "settings": { "caption": "@glowgirl" } },
-        "v2": { "type": "video", "settings": { "caption": "@skindiary" } },
-        "v3": { "type": "video", "settings": { "caption": "@dewyroutine" } },
-        "v4": { "type": "video", "settings": { "caption": "@morningglow" } }
-      },
-      "block_order": ["v1", "v2", "v3", "v4"]
+      "block_order": ["b1", "b2", "b3"]
     },
     "reviews": {
       "type": "reviews",
       "blocks": {
-        "r1": { "type": "review", "settings": { "name": "Sarah M.", "title": "Holy grail glow", "text": "Two weeks in and my skin is so plump and glowy. This is a holy grail!" } },
-        "r2": { "type": "review", "settings": { "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal. My makeup sits so much better now." } },
-        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth every penny", "text": "Gentle, effective, and my skin barrier finally feels happy." } }
+        "r1": { "type": "review", "settings": { "name": "Sarah M.", "title": "Holy grail glow", "text": "Two weeks in and my skin is so plump and glowy." } },
+        "r2": { "type": "review", "settings": { "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal." } },
+        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth it", "text": "Gentle and effective." } }
       },
       "block_order": ["r1", "r2", "r3"]
     },
-    "clinical": {
-      "type": "clinical-results",
-      "settings": { "gradient": true },
-      "blocks": {
-        "s1": { "type": "stat", "settings": { "number": "94", "suffix": "%", "label": "saw smoother, plumper skin" } },
-        "s2": { "type": "stat", "settings": { "number": "89", "suffix": "%", "label": "reported a visible glow" } },
-        "s3": { "type": "stat", "settings": { "number": "96", "suffix": "%", "label": "would recommend to a friend" } },
-        "s4": { "type": "stat", "settings": { "number": "72", "suffix": "hr", "label": "of continuous hydration" } }
-      },
-      "block_order": ["s1", "s2", "s3", "s4"]
-    },
-    "bundle": {
-      "type": "bundle-offer",
-      "blocks": {
-        "b1": { "type": "bundle", "settings": { "title": "The Essentials", "description": "Start your glow journey.", "features": "Hydrating serum\nGlow moisturizer", "price_override": 4900, "compare_override": 6400 } },
-        "b2": { "type": "bundle", "settings": { "title": "The Glow Ritual", "description": "Our best-selling routine.", "features": "Hydrating serum\nGlow moisturizer\nOvernight mask", "popular": true, "tag": "Most popular", "price_override": 7900, "compare_override": 11200 } },
-        "b3": { "type": "bundle", "settings": { "title": "The Full Edit", "description": "Everything you need to glow.", "features": "Hydrating serum\nGlow moisturizer\nOvernight mask\nLip treatment", "price_override": 9900, "compare_override": 14800 } }
-      },
-      "block_order": ["b1", "b2", "b3"]
-    },
     "faq": {
       "type": "faq",
+      "settings": { "bg_surface": true },
       "blocks": {
-        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a visible glow within 2 weeks, with full results at 4–8 weeks.</p>" } },
-        "q2": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes — our formulas are fragrance-free and dermatologist tested.</p>" } },
-        "q3": { "type": "qa", "settings": { "question": "What's your return policy?", "answer": "<p>We offer a 30-day glow guarantee. Not in love? We'll refund you.</p>" } },
-        "q4": { "type": "qa", "settings": { "question": "Is it cruelty-free and vegan?", "answer": "<p>Always. LUMA is 100% vegan and never tested on animals.</p>" } }
+        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a glow within 2 weeks.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "Is it for sensitive skin?", "answer": "<p>Yes, it's fragrance-free and dermatologist tested.</p>" } }
       },
-      "block_order": ["q1", "q2", "q3", "q4"]
+      "block_order": ["q1", "q2"]
     }
   },
-  "order": ["hero", "trust", "featured", "before-after", "benefits", "ugc", "reviews", "clinical", "bundle", "faq"]
+  "order": ["hero", "trust", "featured", "benefits", "reviews", "faq"]
 }
