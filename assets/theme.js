@@ -272,12 +272,12 @@
     if (reduced || !items.length) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        const v = $('video[data-autoplay]', e.target);
+        const v = $('video', e.target);
         if (!v) return;
         if (e.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
       });
     }, { threshold: 0.6 });
-    items.forEach((i) => io.observe(i));
+    items.filter((i) => i.hasAttribute('data-ugc-autoplay')).forEach((i) => io.observe(i));
   }
 
   /* ---------- Boot (element binders only; all guarded) ---------- */
