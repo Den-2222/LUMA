@@ -72,6 +72,6 @@
   {%- unless settings.animations_enabled %}
   :root { --anim-speed: 0; }
   {% endunless -%}
+  {%- if settings.font_heading %}{{ settings.font_heading | font_face: font_display: 'swap' }}{% endif -%}
+  {%- if settings.font_body %}{{ settings.font_body | font_face: font_display: 'swap' }}{% endif -%}
 </style>
-{%- if settings.font_heading %}{{ settings.font_heading | font_face: font_display: 'swap' }}{% endif -%}
-{%- if settings.font_body %}{{ settings.font_body | font_face: font_display: 'swap' }}{% endif -%}
