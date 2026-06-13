@@ -1,0 +1,59 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.bg_surface %}bg-surface{% endif %}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="section-header text-center" data-reveal-group>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.subheading != blank -%}<p class="text-muted" data-reveal>{{ section.settings.subheading }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="grid benefits__grid {% if section.settings.card_style %}benefits--cards{% endif %}" data-reveal-group>
+      {%- for block in section.blocks -%}
+        <div class="benefit" data-reveal {{ block.shopify_attributes }}>
+          <div class="benefit__icon">
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 120 }}" alt="{{ block.settings.title | escape }}">
+            {%- else -%}
+              {% render 'icon', name: block.settings.icon, size: 32 %}
+            {%- endif -%}
+          </div>
+          <h3 class="benefit__title h4">{{ block.settings.title }}</h3>
+          <p class="text-muted">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product benefits",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why it works" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Visible results, gentle on skin" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Powered by clean, clinically-backed ingredients." },
+    { "type": "checkbox", "id": "card_style", "label": "Card style", "default": false },
+    { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": false },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "blocks": [{
+    "type": "benefit", "name": "Benefit", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Custom icon image (optional)" },
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        {"value":"drop","label":"Drop"},{"value":"sparkle","label":"Sparkle"},{"value":"leaf","label":"Leaf"},
+        {"value":"shield","label":"Shield"},{"value":"heart","label":"Heart"},{"value":"sun","label":"Sun"},{"value":"check","label":"Check"}
+      ], "default": "drop" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Deep hydration" },
+      { "type": "textarea", "id": "text", "label": "Text", "default": "72-hour moisture that plumps and softens skin." }
+    ]
+  }],
+  "presets": [{ "name": "Product benefits", "blocks": [
+    {"type":"benefit","settings":{"icon":"drop","title":"Deep hydration","text":"72-hour moisture that plumps and softens."}},
+    {"type":"benefit","settings":{"icon":"sparkle","title":"Visible glow","text":"A dewy, lit-from-within radiance."}},
+    {"type":"benefit","settings":{"icon":"leaf","title":"Clean formula","text":"Vegan, cruelty-free, no nasties."}},
+    {"type":"benefit","settings":{"icon":"shield","title":"Barrier support","text":"Strengthens and protects your skin barrier."}}
+  ]}]
+}
+{% endschema %}

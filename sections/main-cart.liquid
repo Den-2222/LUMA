@@ -1,0 +1,39 @@
+<section class="section">
+  <div class="page-width page-width--narrow">
+    <h1 data-reveal>Your bag</h1>
+    {%- if cart.item_count > 0 -%}
+      <form action="{{ routes.cart_url }}" method="post" data-reveal>
+        {%- for item in cart.items -%}
+          <div class="line-item" data-line="{{ forloop.index }}">
+            <a href="{{ item.url }}">{%- if item.image -%}<img class="line-item__img" src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}">{%- endif -%}</a>
+            <div class="line-item__info">
+              <a href="{{ item.url }}" class="line-item__title">{{ item.product.title }}</a>
+              {%- unless item.variant.title == 'Default Title' -%}<span class="line-item__variant">{{ item.variant.title }}</span>{%- endunless -%}
+              <div class="qty-stepper">
+                <button type="button" data-qty="minus">&minus;</button>
+                <input type="number" min="0" value="{{ item.quantity }}" data-line-qty="{{ forloop.index }}">
+                <button type="button" data-qty="plus">+</button>
+              </div>
+              <div class="line-item__bottom">
+                <span class="price">{{ item.final_line_price | money }}</span>
+                <button type="button" class="line-item__remove" data-line-remove="{{ forloop.index }}">Remove</button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+        <div class="cart-drawer__totals" style="margin-top:2rem;"><span>Subtotal</span><span data-cart-total>{{ cart.total_price | money }}</span></div>
+        <p class="text-muted" style="font-size:.85rem;">Shipping & taxes calculated at checkout.</p>
+        <button type="submit" name="checkout" class="btn btn--full btn--large">Checkout</button>
+      </form>
+    {%- else -%}
+      <div class="cart-empty" data-reveal>
+        <p class="text-muted">Your bag is empty.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn">Start shopping</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Cart" }
+{% endschema %}

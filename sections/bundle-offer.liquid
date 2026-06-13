@@ -1,0 +1,100 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% endif %}">
+  <div class="page-width">
+    <div class="section-header text-center" data-reveal-group>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.subheading != blank -%}<p class="text-muted" data-reveal>{{ section.settings.subheading }}</p>{%- endif -%}
+    </div>
+
+    <div class="grid bundles__grid" data-reveal-group>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign bundle_product = all_products[block.settings.product]
+          assign variant = bundle_product.selected_or_first_available_variant
+          assign price = block.settings.price_override | default: variant.price
+          assign compare = block.settings.compare_override | default: variant.compare_at_price
+        -%}
+        <div class="bundle-card {% if block.settings.popular %}is-popular{% endif %}" data-reveal {{ block.shopify_attributes }}>
+          {%- if block.settings.popular and block.settings.tag != blank -%}
+            <span class="badge bundle-card__tag">{{ block.settings.tag }}</span>
+          {%- endif -%}
+
+          <div class="bundle-card__media media-zoom">
+            {%- if block.settings.image != blank -%}
+              <img class="lazy-img" src="{{ block.settings.image | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+            {%- elsif bundle_product.featured_image -%}
+              <img class="lazy-img" src="{{ bundle_product.featured_image | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+            {%- else -%}{{ 'product-2' | placeholder_svg_tag }}{%- endif -%}
+          </div>
+
+          <h3 class="h3" style="margin:0">{{ block.settings.title }}</h3>
+          {%- if block.settings.description != blank -%}<p class="text-muted" style="margin:0">{{ block.settings.description }}</p>{%- endif -%}
+
+          {%- if block.settings.features != blank -%}
+            <div class="bundle-card__features">
+              {%- assign feats = block.settings.features | newline_to_br | split: '<br />' -%}
+              {%- for f in feats -%}
+                {%- assign ft = f | strip -%}
+                {%- if ft != blank -%}<div class="bundle-card__feature">{% render 'icon', name: 'check', size: 18 %}<span>{{ ft }}</span></div>{%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="bundle-card__price">
+            <span class="price__sale" style="font-size:1.6rem;font-weight:700;">{{ price | money }}</span>
+            {%- if compare > price -%}
+              <s class="price__compare">{{ compare | money }}</s>
+              {%- assign save = compare | minus: price | times: 100 | divided_by: compare -%}
+              <span class="badge badge--sale">Save {{ save }}%</span>
+            {%- endif -%}
+          </div>
+
+          {%- if bundle_product != blank and variant -%}
+            {%- form 'product', bundle_product, data-quick-add-form: '' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button type="submit" class="btn btn--full btn--large" {% unless variant.available %}disabled{% endunless %}>
+                {%- if variant.available %}{{ block.settings.button_label | default: 'Add bundle to bag' }}{% else %}Sold out{% endif -%}
+              </button>
+            {%- endform -%}
+          {%- else -%}
+            <a href="{{ block.settings.link }}" class="btn btn--full btn--large">{{ block.settings.button_label | default: 'Shop bundle' }}</a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bundle offer",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Save more" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build your glow ritual" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Bundle and save up to 30% on your full routine." },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": true }
+  ],
+  "blocks": [{
+    "type": "bundle", "name": "Bundle", "settings": [
+      { "type": "product", "id": "product", "label": "Product (bundle/kit)" },
+      { "type": "image_picker", "id": "image", "label": "Image (overrides product image)" },
+      { "type": "text", "id": "title", "label": "Title", "default": "The Glow Ritual" },
+      { "type": "text", "id": "description", "label": "Description", "default": "Your complete day-to-night routine." },
+      { "type": "textarea", "id": "features", "label": "Features (one per line)", "default": "Hydrating serum\nGlow moisturizer\nOvernight mask" },
+      { "type": "checkbox", "id": "popular", "label": "Most popular", "default": false },
+      { "type": "text", "id": "tag", "label": "Tag label", "default": "Most popular" },
+      { "type": "text", "id": "button_label", "label": "Button label", "default": "Add bundle to bag" },
+      { "type": "url", "id": "link", "label": "Fallback link (if no product)" },
+      { "type": "header", "content": "Price override (optional)" },
+      { "type": "number", "id": "price_override", "label": "Price (cents)" },
+      { "type": "number", "id": "compare_override", "label": "Compare-at (cents)" }
+    ]
+  }],
+  "presets": [{ "name": "Bundle offer", "blocks": [
+    {"type":"bundle","settings":{"title":"The Essentials","description":"Start your glow journey.","features":"Hydrating serum\nGlow moisturizer","price_override":4900,"compare_override":6400}},
+    {"type":"bundle","settings":{"title":"The Glow Ritual","description":"Our best-selling routine.","features":"Hydrating serum\nGlow moisturizer\nOvernight mask","popular":true,"tag":"Most popular","price_override":7900,"compare_override":11200}},
+    {"type":"bundle","settings":{"title":"The Full Edit","description":"Everything you need to glow.","features":"Hydrating serum\nGlow moisturizer\nOvernight mask\nLip treatment","price_override":9900,"compare_override":14800}}
+  ]}]
+}
+{% endschema %}

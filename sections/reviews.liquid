@@ -1,0 +1,81 @@
+<section class="section {% if section.settings.bg_surface %}bg-surface{% endif %}">
+  <div class="page-width">
+    <div class="reviews__summary" data-reveal-group>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 data-reveal style="text-align:center">{{ section.settings.heading }}</h2>{%- endif -%}
+      <div data-reveal style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <span class="reviews__score">{{ section.settings.avg_rating }}</span>
+        {% render 'star-rating', rating: section.settings.avg_rating %}
+        <span class="text-muted">{{ section.settings.review_count }} verified reviews</span>
+      </div>
+    </div>
+
+    <div class="grid reviews__grid" data-reveal-group>
+      {%- for block in section.blocks -%}
+        <article class="review-card" data-reveal {{ block.shopify_attributes }}>
+          {% render 'star-rating', rating: block.settings.rating %}
+          {%- if block.settings.title != blank -%}<h3 class="h4" style="margin:0">{{ block.settings.title }}</h3>{%- endif -%}
+          {%- if block.settings.image != blank or block.settings.video != blank -%}
+            <div class="review-card__media media-zoom">
+              {%- if block.settings.video != blank -%}
+                {{ block.settings.video | video_tag: image_size: '600x', controls: true }}
+              {%- else -%}
+                <img class="lazy-img" src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.name | escape }} review" loading="lazy">
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <p class="review-card__body">{{ block.settings.text }}</p>
+          <div class="review-card__head">
+            {%- if block.settings.avatar != blank -%}
+              <img class="review-card__avatar" src="{{ block.settings.avatar | image_url: width: 80 }}" alt="{{ block.settings.name | escape }}">
+            {%- else -%}
+              <span class="review-card__avatar" style="display:grid;place-items:center;color:var(--color-accent);font-weight:700;">{{ block.settings.name | slice: 0 | upcase }}</span>
+            {%- endif -%}
+            <div>
+              <div class="review-card__name">{{ block.settings.name }}</div>
+              {%- if block.settings.verified -%}<span class="review-card__verified">{% render 'icon', name: 'check', size: 12 %} Verified buyer</span>{%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="text-center" data-reveal style="margin-top:2.5rem;">
+        <a href="{{ section.settings.button_link }}" class="btn btn--secondary">{{ section.settings.button_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "5-star love" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What the glow gang says" },
+    { "type": "text", "id": "avg_rating", "label": "Average rating", "default": "4.9" },
+    { "type": "text", "id": "review_count", "label": "Review count", "default": "2,480" },
+    { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Read all reviews" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [{
+    "type": "review", "name": "Review", "settings": [
+      { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+      { "type": "text", "id": "title", "label": "Title", "default": "My skin has never looked better" },
+      { "type": "textarea", "id": "text", "label": "Review text", "default": "Two weeks in and my skin is so plump and glowy. This is a holy grail!" },
+      { "type": "text", "id": "name", "label": "Name", "default": "Sarah M." },
+      { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true },
+      { "type": "image_picker", "id": "avatar", "label": "Avatar" },
+      { "type": "image_picker", "id": "image", "label": "Review photo" },
+      { "type": "video", "id": "video", "label": "Review video (overrides photo)" }
+    ]
+  }],
+  "presets": [{ "name": "Reviews", "blocks": [
+    {"type":"review","settings":{"name":"Sarah M.","title":"Holy grail glow","text":"Two weeks in and my skin is so plump and glowy!"}},
+    {"type":"review","settings":{"name":"Jenna L.","title":"Obsessed","text":"The hydration is unreal. My makeup sits so much better now."}},
+    {"type":"review","settings":{"name":"Mia R.","title":"Worth every penny","text":"Gentle, effective, and my skin barrier finally feels happy."}}
+  ]}]
+}
+{% endschema %}

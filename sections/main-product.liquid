@@ -1,0 +1,181 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<section class="section" data-product-root>
+  <div class="page-width">
+    <div class="product">
+      {%- comment -%} ---------- GALLERY ---------- {%- endcomment -%}
+      <div class="product__media-col" data-gallery>
+        <div class="product__gallery">
+          <div class="product__main-media media-zoom" data-gallery-main
+            {% if section.settings.tilt and settings.anim_tilt %}data-tilt="4"{% endif %} data-reveal="zoom">
+            {%- if product.featured_media -%}
+              {%- if product.featured_media.media_type == 'video' -%}
+                {{ product.featured_media | media_tag: autoplay: false, loop: true, controls: true }}
+              {%- else -%}
+                <img data-variant-image src="{{ product.featured_media | image_url: width: 1200 }}" alt="{{ product.featured_media.alt | escape }}" width="1200" height="{{ 1200 | divided_by: product.featured_media.preview_image.aspect_ratio }}">
+              {%- endif -%}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+
+          {%- if product.media.size > 1 -%}
+            <div class="product__thumbs">
+              {%- for media in product.media -%}
+                {%- capture media_html -%}
+                  {%- if media.media_type == 'video' -%}{{ media | media_tag: autoplay: false, loop: true, controls: true }}
+                  {%- else -%}<img src="{{ media | image_url: width: 1200 }}" alt="{{ media.alt | escape }}">{%- endif -%}
+                {%- endcapture -%}
+                <button type="button" class="product__thumb {% if forloop.first %}is-active{% endif %}" data-gallery-thumb data-media="{{ media_html | url_encode }}" aria-label="View media {{ forloop.index }}">
+                  <img src="{{ media.preview_image | image_url: width: 160 }}" alt="{{ media.alt | escape }}" loading="lazy">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} ---------- BUY BOX ---------- {%- endcomment -%}
+      <div class="product__info">
+        <div data-reveal-group>
+          {%- if product.metafields.reviews.rating.value or section.settings.show_static_rating -%}
+            <div data-reveal>{% render 'star-rating', rating: product.metafields.reviews.rating.value | default: 4.9, count: product.metafields.reviews.rating_count | default: '2,480' %}</div>
+          {%- endif -%}
+
+          {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+          <h1 class="product__title h2" data-reveal>{{ product.title }}</h1>
+          {%- if product.metafields.descriptors.subtitle.value -%}
+            <p class="text-muted" data-reveal>{{ product.metafields.descriptors.subtitle.value }}</p>
+          {%- elsif section.settings.subtitle != blank -%}
+            <p class="text-muted" data-reveal>{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+
+          <div class="product__price" data-reveal>{% render 'price', variant: current_variant, show_save: true %}</div>
+
+          {%- form 'product', product, data-product-form: '', data-reveal: '' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+            {%- unless product.has_only_default_variant -%}
+              <div class="product__variants">
+                {%- for option in product.options_with_values -%}
+                  <div class="variant-option" data-option-index="{{ forloop.index0 }}" data-value="{{ option.selected_value }}">
+                    <span class="variant-option__label">{{ option.name }}</span>
+                    <div class="variant-pills">
+                      {%- for value in option.values -%}
+                        <button type="button" class="variant-pill {% if value == option.selected_value %}is-active{% endif %}" data-value="{{ value }}">{{ value }}</button>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+
+            {%- comment -%} Selling plans (subscriptions) {%- endcomment -%}
+            {%- if product.selling_plan_groups.size > 0 -%}
+              <div class="product__variants">
+                {%- for group in product.selling_plan_groups -%}
+                  <div class="variant-option">
+                    <span class="variant-option__label">{{ group.name }}</span>
+                    <select name="selling_plan" class="input">
+                      <option value="">One-time purchase</option>
+                      {%- for plan in group.selling_plans -%}
+                        <option value="{{ plan.id }}">{{ plan.name }}</option>
+                      {%- endfor -%}
+                    </select>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            <div style="display:flex;gap:.8rem;align-items:stretch;margin-top:1rem;">
+              <div class="qty-stepper">
+                <button type="button" data-qty="minus" aria-label="Decrease">&minus;</button>
+                <input type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+                <button type="button" data-qty="plus" aria-label="Increase">+</button>
+              </div>
+              <button type="submit" data-atc class="btn btn--full btn--large" {% unless current_variant.available %}disabled{% endunless %}>
+                <span data-atc-label>{% if current_variant.available %}{{ section.settings.button_label | default: 'Add to bag' }}{% else %}Sold out{% endif %}</span>
+              </button>
+            </div>
+            {%- if section.settings.show_payment_terms -%}{{ form | payment_terms }}{%- endif -%}
+
+            {%- comment -%} Sentinel: sticky bar appears when this scrolls past {%- endcomment -%}
+            <div data-atc-sentinel aria-hidden="true"></div>
+          {%- endform -%}
+
+          {%- if section.settings.trust_text != blank -%}
+            <div class="product__trust" data-reveal>
+              {%- assign trust = section.settings.trust_text | newline_to_br | split: '<br />' -%}
+              {%- for t in trust -%}
+                {%- assign tt = t | strip -%}
+                {%- if tt != blank -%}<span class="product__trust-item">{% render 'icon', name: 'check', size: 16 %}{{ tt }}</span>{%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} ---------- ACCORDIONS (description / how to use / ingredients) ---------- {%- endcomment -%}
+          <div class="accordion" data-accordion style="margin-top:1.5rem;" data-reveal>
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'description' -%}
+                  <div class="accordion__item {% if block.settings.open %}is-open{% endif %}" {{ block.shopify_attributes }}>
+                    <button class="accordion__trigger" aria-expanded="{{ block.settings.open }}"><span class="h4" style="margin:0">{{ block.settings.title }}</span><span class="accordion__icon">{% render 'icon', name: 'plus', size: 20 %}</span></button>
+                    <div class="accordion__panel"><div><div class="faq__answer rte">{{ block.settings.content | default: product.description }}</div></div></div>
+                  </div>
+                {%- when 'collapsible' -%}
+                  <div class="accordion__item {% if block.settings.open %}is-open{% endif %}" {{ block.shopify_attributes }}>
+                    <button class="accordion__trigger" aria-expanded="{{ block.settings.open }}"><span class="h4" style="margin:0">{{ block.settings.title }}</span><span class="accordion__icon">{% render 'icon', name: 'plus', size: 20 %}</span></button>
+                    <div class="accordion__panel"><div><div class="faq__answer rte">{{ block.settings.content }}</div></div></div>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Variant data for JS (price/availability/image swap) {%- endcomment -%}
+  <script type="application/json" data-variant-json>
+    [{%- for v in product.variants -%}{
+      "id": {{ v.id }},
+      "options": {{ v.options | json }},
+      "price": {{ v.price }},
+      "compare_at_price": {{ v.compare_at_price | default: 0 | json }},
+      "available": {{ v.available }},
+      "featured_image": {{ v.featured_image | json }}
+    }{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product information",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Best seller" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle (fallback)", "default": "Lightweight glow serum" },
+    { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to bag" },
+    { "type": "checkbox", "id": "show_static_rating", "label": "Show rating (if no review app)", "default": true },
+    { "type": "checkbox", "id": "show_payment_terms", "label": "Show payment terms (Shop Pay)", "default": true },
+    { "type": "checkbox", "id": "tilt", "label": "3D tilt on main image", "default": true },
+    { "type": "textarea", "id": "trust_text", "label": "Trust items (one per line)", "default": "Free shipping over $50\n30-day guarantee\nDermatologist tested" }
+  ],
+  "blocks": [
+    {
+      "type": "description", "name": "Description", "limit": 1, "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Description" },
+        { "type": "richtext", "id": "content", "label": "Content (blank = product description)" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": true }
+      ]
+    },
+    {
+      "type": "collapsible", "name": "Collapsible row", "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "How to use" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Apply 2-3 drops to clean skin morning and night.</p>" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    }
+  ]
+}
+{% endschema %}

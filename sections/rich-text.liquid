@@ -1,0 +1,29 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.bg_surface %}bg-surface{% endif %}">
+  <div class="page-width page-width--narrow text-center" data-reveal-group>
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'eyebrow' -%}<p class="eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+        {%- when 'heading' -%}<h2 data-reveal {{ block.shopify_attributes }}>{{ block.settings.text }}</h2>
+        {%- when 'text' -%}<div class="rte" data-reveal style="font-size:1.1rem;" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'button' -%}<div data-reveal style="margin-top:1.5rem;" {{ block.shopify_attributes }}><a href="{{ block.settings.link }}" class="btn">{{ block.settings.label }}</a></div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": false },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "blocks": [
+    { "type": "eyebrow", "name": "Eyebrow", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Our promise" }] },
+    { "type": "heading", "name": "Heading", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Skincare that earns its place" }] },
+    { "type": "text", "name": "Text", "settings": [{ "type": "richtext", "id": "text", "label": "Text", "default": "<p>Clean, effective, and made to make you glow.</p>" }] },
+    { "type": "button", "name": "Button", "settings": [{ "type": "text", "id": "label", "label": "Label", "default": "Shop now" }, { "type": "url", "id": "link", "label": "Link" }] }
+  ],
+  "presets": [{ "name": "Rich text", "blocks": [{"type":"eyebrow"},{"type":"heading"},{"type":"text"}] }]
+}
+{% endschema %}

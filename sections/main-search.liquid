@@ -1,0 +1,28 @@
+<section class="section">
+  <div class="page-width">
+    <div class="section-header text-center page-width--narrow" data-reveal-group>
+      <h1 data-reveal>Search</h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" data-reveal style="display:flex;gap:.5rem;max-width:560px;margin-inline:auto;">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products…" class="input">
+        <button type="submit" class="btn">{% render 'icon', name: 'search', size: 20 %}</button>
+      </form>
+    </div>
+
+    {%- if search.performed -%}
+      {%- if search.results.size > 0 -%}
+        <p class="text-center text-muted" style="margin-bottom:2rem;">{{ search.results_count }} results for "{{ search.terms }}"</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr));" data-reveal-group>
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}{% render 'product-card', product: item, reveal: true %}{%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p class="text-center text-muted">No results found. Try another search.</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Search" }
+{% endschema %}

@@ -1,0 +1,61 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.bg_surface %}bg-surface{% endif %}">
+  <div class="page-width">
+    <div class="grid" style="grid-template-columns:{% if section.settings.image != blank %}1fr 1fr{% else %}1fr{% endif %};gap:clamp(2rem,5vw,4rem);align-items:center;">
+      {%- if section.settings.image != blank -%}
+        <div class="media media-zoom media--portrait" data-reveal="left" {% if section.settings.float and settings.anim_float %}{% endif %}>
+          <img class="lazy-img" src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.heading | escape }}" loading="lazy">
+        </div>
+      {%- endif -%}
+
+      <div data-reveal-group>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="text-muted rte" data-reveal>{{ section.settings.text }}</div>{%- endif -%}
+
+        <div class="accordion" data-accordion data-accordion-single style="margin-top:1rem;">
+          {%- for block in section.blocks -%}
+            <div class="accordion__item" data-reveal {{ block.shopify_attributes }}>
+              <button class="accordion__trigger" aria-expanded="false">
+                <span style="display:flex;align-items:center;gap:.8rem;">
+                  {%- if block.settings.icon != blank -%}<span class="benefit__icon" style="width:42px;height:42px;margin:0;">{% render 'icon', name: block.settings.icon, size: 22 %}</span>{%- endif -%}
+                  <span class="h4" style="margin:0">{{ block.settings.name }}</span>
+                </span>
+                <span class="accordion__icon">{% render 'icon', name: 'plus', size: 20 %}</span>
+              </button>
+              <div class="accordion__panel"><div><div class="faq__answer rte">{{ block.settings.description }}</div></div></div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ingredients",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The formula" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Powered by clean actives" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every ingredient is chosen for a reason — and nothing that doesn't belong.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": true },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "blocks": [{
+    "type": "ingredient", "name": "Ingredient", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        {"value":"drop","label":"Drop"},{"value":"leaf","label":"Leaf"},{"value":"sparkle","label":"Sparkle"},
+        {"value":"sun","label":"Sun"},{"value":"heart","label":"Heart"},{"value":"","label":"None"}
+      ], "default": "drop" },
+      { "type": "text", "id": "name", "label": "Name", "default": "Hyaluronic Acid" },
+      { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Holds up to 1000x its weight in water for deep, lasting hydration.</p>" }
+    ]
+  }],
+  "presets": [{ "name": "Ingredients", "blocks": [
+    {"type":"ingredient","settings":{"icon":"drop","name":"Hyaluronic Acid","description":"<p>Deep hydration that plumps and smooths.</p>"}},
+    {"type":"ingredient","settings":{"icon":"sparkle","name":"Niacinamide","description":"<p>Evens tone and refines the look of pores.</p>"}},
+    {"type":"ingredient","settings":{"icon":"leaf","name":"Squalane","description":"<p>Lightweight moisture that softens skin.</p>"}}
+  ]}]
+}
+{% endschema %}

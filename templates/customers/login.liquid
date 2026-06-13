@@ -1,0 +1,30 @@
+<section class="section"><div class="page-width page-width--narrow">
+  <h1 class="text-center">Login</h1>
+  <div style="max-width:420px;margin:0 auto;">
+    {%- form 'customer_login' -%}
+      {{ form.errors | default_errors }}
+      <label class="variant-option__label" for="ce">Email</label>
+      <input type="email" name="customer[email]" id="ce" class="input" required style="margin-bottom:1rem;">
+      {%- if form.password_needed -%}
+        <label class="variant-option__label" for="cp">Password</label>
+        <input type="password" name="customer[password]" id="cp" class="input" style="margin-bottom:1rem;">
+      {%- endif -%}
+      <button type="submit" class="btn btn--full btn--large">Sign in</button>
+      <p class="text-center text-muted" style="margin-top:1rem;font-size:.9rem;">
+        <a href="#recover" class="link-underline">Forgot password?</a> · <a href="{{ routes.account_register_url }}" class="link-underline">Create account</a>
+      </p>
+    {%- endform -%}
+    <div id="recover" style="margin-top:1rem;">
+      {%- form 'recover_customer_password' -%}
+        {{ form.errors | default_errors }}
+        {%- if form.posted_successfully? -%}<p>We've sent you a reset link.</p>{%- endif -%}
+        <details><summary class="link-underline" style="cursor:pointer;">Reset password</summary>
+          <div style="display:flex;gap:.5rem;margin-top:.8rem;">
+            <input type="email" name="email" class="input" placeholder="Email" required>
+            <button type="submit" class="btn">Send</button>
+          </div>
+        </details>
+      {%- endform -%}
+    </div>
+  </div>
+</div></section>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js {% if settings.anim_page_fade %}page-fade{% endif %}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'css-variables' %}
+    {{ content_for_header }}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      window.LUMA = {
+        routes: {
+          cart_add_url: '{{ routes.cart_add_url }}',
+          cart_change_url: '{{ routes.cart_change_url }}',
+          cart_update_url: '{{ routes.cart_update_url }}',
+          cart_url: '{{ routes.cart_url }}'
+        },
+        cartType: '{{ settings.cart_type }}',
+        freeShip: {
+          enabled: {{ settings.cart_free_shipping_bar }},
+          threshold: {{ settings.cart_free_shipping_threshold | times: 100 }},
+          currency: '{{ cart.currency.iso_code }}'
+        },
+        moneyFormat: {{ shop.money_format | json }},
+        settings: {
+          animations: {{ settings.animations_enabled }},
+          tilt: {{ settings.anim_tilt }},
+          parallax: {{ settings.anim_parallax }},
+          float: {{ settings.anim_float }}
+        },
+        strings: {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          added: {{ 'products.product.added' | t | json }}
+        }
+      };
+    </script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {%- render 'cart-drawer' -%}
+
+    <div class="page-overlay" data-overlay hidden></div>
+
+    {{ 'theme.js' | asset_url | script_tag }}
+    {{ 'animations.js' | asset_url | script_tag }}
+    {{ 'cart.js' | asset_url | script_tag }}
+  </body>
+</html>

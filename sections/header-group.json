@@ -1,0 +1,20 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "m1": { "type": "message", "settings": { "text": "Free shipping on orders over $50", "icon": "truck" } },
+        "m2": { "type": "message", "settings": { "text": "30-day glow guarantee", "icon": "shield" } },
+        "m3": { "type": "message", "settings": { "text": "Clean, cruelty-free skincare", "icon": "leaf" } }
+      },
+      "block_order": ["m1", "m2", "m3"]
+    },
+    "header": {
+      "type": "header",
+      "settings": { "brand_name": "LUMA", "menu": "main-menu", "show_search": true }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

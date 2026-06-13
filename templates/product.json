@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "desc": { "type": "description", "settings": { "title": "Description", "open": true } },
+        "how": { "type": "collapsible", "settings": { "title": "How to use", "content": "<p>Apply 2–3 drops to clean skin morning and night. Follow with moisturizer.</p>" } },
+        "ship": { "type": "collapsible", "settings": { "title": "Shipping & returns", "content": "<p>Free shipping over $50. 30-day glow guarantee.</p>" } }
+      },
+      "block_order": ["desc", "how", "ship"]
+    },
+    "benefits": {
+      "type": "product-benefits",
+      "settings": { "bg_surface": true, "heading": "Why you'll love it" },
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "icon": "drop", "title": "Deep hydration", "text": "72-hour moisture that plumps and softens." } },
+        "b2": { "type": "benefit", "settings": { "icon": "sparkle", "title": "Visible glow", "text": "A dewy, lit-from-within radiance." } },
+        "b3": { "type": "benefit", "settings": { "icon": "shield", "title": "Barrier support", "text": "Strengthens your skin barrier." } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "ingredients": {
+      "type": "ingredients",
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "icon": "drop", "name": "Hyaluronic Acid", "description": "<p>Deep hydration that plumps and smooths.</p>" } },
+        "i2": { "type": "ingredient", "settings": { "icon": "sparkle", "name": "Niacinamide", "description": "<p>Evens tone and refines the look of pores.</p>" } },
+        "i3": { "type": "ingredient", "settings": { "icon": "leaf", "name": "Squalane", "description": "<p>Lightweight moisture that softens skin.</p>" } }
+      },
+      "block_order": ["i1", "i2", "i3"]
+    },
+    "before-after": {
+      "type": "before-after",
+      "settings": { "heading": "Before & after", "gradient": true }
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "name": "Sarah M.", "title": "Holy grail", "text": "My skin has never looked better." } },
+        "r2": { "type": "review", "settings": { "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal." } },
+        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth it", "text": "Gentle and effective." } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": { "bg_surface": true },
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a glow within 2 weeks.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "Is it for sensitive skin?", "answer": "<p>Yes, it's fragrance-free and dermatologist tested.</p>" } }
+      },
+      "block_order": ["q1", "q2"]
+    },
+    "related": { "type": "related-products" },
+    "sticky": { "type": "sticky-add-to-cart" }
+  },
+  "order": ["main", "benefits", "ingredients", "before-after", "reviews", "faq", "related", "sticky"]
+}

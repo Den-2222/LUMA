@@ -1,0 +1,54 @@
+{%- liquid
+  if section.settings.product != blank
+    assign product = all_products[section.settings.product]
+  elsif template.name == 'product'
+    assign product = product
+  endif
+  assign variant = product.selected_or_first_available_variant
+-%}
+{%- if product != blank and variant -%}
+<div class="sticky-atc" data-sticky-atc data-product-root>
+  <div class="page-width">
+    <div class="sticky-atc__inner">
+      <div class="sticky-atc__info">
+        {%- if product.featured_image -%}
+          <img class="sticky-atc__img" data-variant-image src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.title | escape }}">
+        {%- endif -%}
+        <div style="min-width:0;">
+          <div class="sticky-atc__title">{{ product.title }}</div>
+          <span data-sticky-price>{% render 'price', variant: variant %}</span>
+        </div>
+      </div>
+
+      {%- form 'product', product, data-sticky-form: '', class: 'sticky-atc__form', style: 'display:flex;align-items:center;gap:1rem;' -%}
+        {%- unless product.has_only_default_variant -%}
+          <div class="sticky-atc__select">
+            <select name="id" data-sticky-id>
+              {%- for v in product.variants -%}
+                <option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>{{ v.title }} — {{ v.price | money }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ variant.id }}" data-sticky-id>
+        {%- endunless -%}
+        <button type="submit" class="btn btn--large" {% unless variant.available %}disabled{% endunless %}>
+          {%- if variant.available %}{{ section.settings.button_label | default: 'Add to bag' }}{% else %}Sold out{% endif -%}
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "settings": [
+    { "type": "paragraph", "content": "On product pages this auto-uses the current product. Set a product to feature it on other pages (e.g. homepage)." },
+    { "type": "product", "id": "product", "label": "Featured product (optional)" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to bag" }
+  ],
+  "presets": [{ "name": "Sticky add to cart" }]
+}
+{% endschema %}

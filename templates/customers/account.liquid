@@ -1,0 +1,28 @@
+<section class="section"><div class="page-width">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <h1>Hi, {{ customer.first_name | default: 'there' }}</h1>
+    <a href="{{ routes.account_logout_url }}" class="btn btn--secondary">Log out</a>
+  </div>
+  <div class="grid" style="grid-template-columns:2fr 1fr;gap:2rem;margin-top:2rem;">
+    <div>
+      <h3>Order history</h3>
+      {%- paginate customer.orders by 10 -%}
+        {%- if customer.orders.size > 0 -%}
+          <div class="card" style="padding:1rem;">
+          {%- for order in customer.orders -%}
+            <div class="line-item__bottom" style="padding:.8rem 0;border-bottom:1px solid var(--color-border);">
+              <a href="{{ order.customer_url }}" class="link-underline">{{ order.name }} — {{ order.created_at | date: '%b %d, %Y' }}</a>
+              <span>{{ order.total_price | money }} · {{ order.financial_status_label }}</span>
+            </div>
+          {%- endfor -%}
+          </div>
+        {%- else -%}<p class="text-muted">No orders yet.</p>{%- endif -%}
+      {%- endpaginate -%}
+    </div>
+    <div>
+      <h3>Account details</h3>
+      <p class="text-muted">{{ customer.default_address | format_address }}</p>
+      <a href="{{ routes.account_addresses_url }}" class="link-arrow">Manage addresses {% render 'icon', name: 'arrow', size: 16 %}</a>
+    </div>
+  </div>
+</div></section>

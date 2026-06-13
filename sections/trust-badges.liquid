@@ -1,0 +1,54 @@
+<section class="section section--tight" style="background:{{ section.settings.bg }};color:{{ section.settings.text }};">
+  {%- if section.settings.marquee -%}
+    <div class="marquee" style="--marquee-duration:{{ section.settings.speed }}s;">
+      <div class="marquee__track">
+        {%- for block in section.blocks -%}
+          <span style="display:inline-flex;align-items:center;gap:.6em;font-weight:600;letter-spacing:.04em;" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank %}{% render 'icon', name: block.settings.icon, size: 22 %}{% endif -%}
+            {{ block.settings.text }}
+          </span>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- else -%}
+    <div class="page-width">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));text-align:center;" data-reveal-group>
+        {%- for block in section.blocks -%}
+          <div data-reveal style="display:flex;flex-direction:column;align-items:center;gap:.5rem;" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank %}{% render 'icon', name: block.settings.icon, size: 28 %}{% endif -%}
+            <span style="font-weight:600;font-size:.92rem;">{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "settings": [
+    { "type": "checkbox", "id": "marquee", "label": "Scrolling marquee", "default": true },
+    { "type": "range", "id": "speed", "label": "Marquee speed", "min": 15, "max": 60, "step": 5, "unit": "s", "default": 30 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text", "label": "Text", "default": "#2b2326" }
+  ],
+  "blocks": [{
+    "type": "badge", "name": "Badge", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        {"value":"leaf","label":"Leaf"},{"value":"shield","label":"Shield"},{"value":"truck","label":"Truck"},
+        {"value":"heart","label":"Heart"},{"value":"sparkle","label":"Sparkle"},{"value":"drop","label":"Drop"},
+        {"value":"check","label":"Check"},{"value":"","label":"None"}
+      ], "default": "sparkle" },
+      { "type": "text", "id": "text", "label": "Text", "default": "Dermatologist tested" }
+    ]
+  }],
+  "presets": [{ "name": "Trust badges", "blocks": [
+    {"type":"badge","settings":{"icon":"leaf","text":"100% Vegan"}},
+    {"type":"badge","settings":{"icon":"heart","text":"Cruelty-Free"}},
+    {"type":"badge","settings":{"icon":"shield","text":"Dermatologist Tested"}},
+    {"type":"badge","settings":{"icon":"drop","text":"Hyaluronic Acid"}},
+    {"type":"badge","settings":{"icon":"sparkle","text":"Clean Ingredients"}}
+  ]}]
+}
+{% endschema %}

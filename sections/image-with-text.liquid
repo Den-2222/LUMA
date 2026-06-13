@@ -1,0 +1,43 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% endif %}">
+  <div class="page-width">
+    <div class="grid" style="grid-template-columns:1fr 1fr;align-items:center;gap:clamp(2rem,5vw,5rem);{% if section.settings.media_right %}direction:rtl;{% endif %}">
+      <div class="media media-zoom media--landscape" style="direction:ltr;"
+        data-reveal="{% if section.settings.media_right %}right{% else %}left{% endif %}"
+        {% if section.settings.tilt and settings.anim_tilt %}data-tilt="4"{% endif %}>
+        {%- if section.settings.video != blank -%}
+          {{ section.settings.video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true, controls: false }}
+        {%- elsif section.settings.image != blank -%}
+          <img class="lazy-img" src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.heading | escape }}" loading="lazy">
+        {%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag }}{%- endif -%}
+      </div>
+
+      <div style="direction:ltr;" data-reveal-group>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="rte text-muted" data-reveal style="font-size:1.05rem;">{{ section.settings.text }}</div>{%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <div data-reveal style="margin-top:1.5rem;"><a href="{{ section.settings.button_link }}" class="btn">{{ section.settings.button_label }} {% render 'icon', name: 'arrow', size: 18 %}</a></div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Video (overrides image)" },
+    { "type": "checkbox", "id": "media_right", "label": "Media on right", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The LUMA way" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A ritual, not a routine" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Designed to feel as good as it works — every step a moment for you.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Discover more" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "checkbox", "id": "tilt", "label": "3D tilt", "default": true },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "presets": [{ "name": "Image with text" }]
+}
+{% endschema %}

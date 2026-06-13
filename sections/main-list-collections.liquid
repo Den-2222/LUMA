@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="page-width">
+    <div class="section-header text-center" data-reveal-group>
+      <h1 data-reveal>Collections</h1>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));" data-reveal-group>
+      {%- for collection in collections -%}
+        <a href="{{ collection.url }}" class="card" data-reveal style="display:block;">
+          <div class="media media-zoom media--landscape">
+            {%- if collection.featured_image -%}
+              <img class="lazy-img" src="{{ collection.featured_image | image_url: width: 700 }}" alt="{{ collection.title | escape }}" loading="lazy">
+            {%- else -%}{{ 'collection-1' | placeholder_svg_tag }}{%- endif -%}
+          </div>
+          <div class="card__body" style="padding:1rem;"><span class="h4" style="margin:0">{{ collection.title }}</span></div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collections list" }
+{% endschema %}

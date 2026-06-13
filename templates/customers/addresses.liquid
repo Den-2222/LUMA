@@ -1,0 +1,23 @@
+<section class="section"><div class="page-width page-width--narrow">
+  <h1>Your addresses</h1>
+  <p><a href="{{ routes.account_url }}" class="link-underline">Back to account</a></p>
+  {%- paginate customer.addresses by 5 -%}
+    {%- for address in customer.addresses -%}
+      <div class="card" style="padding:1.4rem;margin-bottom:1rem;">
+        <p>{{ address | format_address }}</p>
+      </div>
+    {%- endfor -%}
+  {%- endpaginate -%}
+  <div class="card" style="padding:1.4rem;">
+    <h3>Add a new address</h3>
+    {%- form 'customer_address', customer.new_address -%}
+      <input type="text" name="address[first_name]" class="input" placeholder="First name" style="margin-bottom:.8rem;">
+      <input type="text" name="address[last_name]" class="input" placeholder="Last name" style="margin-bottom:.8rem;">
+      <input type="text" name="address[address1]" class="input" placeholder="Address" style="margin-bottom:.8rem;">
+      <input type="text" name="address[city]" class="input" placeholder="City" style="margin-bottom:.8rem;">
+      <input type="text" name="address[zip]" class="input" placeholder="ZIP / Postal" style="margin-bottom:.8rem;">
+      <input type="text" name="address[country]" class="input" placeholder="Country" style="margin-bottom:1rem;">
+      <button type="submit" class="btn">Save address</button>
+    {%- endform -%}
+  </div>
+</div></section>

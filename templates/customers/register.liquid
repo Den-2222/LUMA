@@ -1,0 +1,14 @@
+<section class="section"><div class="page-width page-width--narrow">
+  <h1 class="text-center">Create account</h1>
+  <div style="max-width:420px;margin:0 auto;">
+    {%- form 'create_customer' -%}
+      {{ form.errors | default_errors }}
+      <input type="text" name="customer[first_name]" class="input" placeholder="First name" style="margin-bottom:1rem;">
+      <input type="text" name="customer[last_name]" class="input" placeholder="Last name" style="margin-bottom:1rem;">
+      <input type="email" name="customer[email]" class="input" placeholder="Email" required style="margin-bottom:1rem;">
+      <input type="password" name="customer[password]" class="input" placeholder="Password" required style="margin-bottom:1rem;">
+      <button type="submit" class="btn btn--full btn--large">Create account</button>
+      <p class="text-center text-muted" style="margin-top:1rem;font-size:.9rem;"><a href="{{ routes.account_login_url }}" class="link-underline">Already have an account?</a></p>
+    {%- endform -%}
+  </div>
+</div></section>

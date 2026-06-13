@@ -1,0 +1,60 @@
+{%- comment -%}
+  Product card with hover image swap + quick add. Param: product, reveal (bool)
+{%- endcomment -%}
+{%- liquid
+  assign ratio_class = ''
+  case settings.card_image_ratio
+    when 'square' then assign ratio_class = 'media--square'
+    when 'portrait' then assign ratio_class = 'media--portrait'
+  endcase
+  assign second = product.images[1]
+-%}
+<div class="card card--product" {% if reveal %}data-reveal{% endif %}>
+  <a href="{{ product.url }}" class="card__media-link">
+    <div class="card__media media media-zoom {{ ratio_class }}">
+      {%- if product.featured_image -%}
+        <img class="card__img--primary lazy-img"
+             src="{{ product.featured_image | image_url: width: 700 }}"
+             srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 700 }} 700w"
+             sizes="(max-width: 749px) 50vw, 25vw"
+             width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
+             alt="{{ product.featured_image.alt | escape | default: product.title }}" loading="lazy">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'card__img--primary' }}
+      {%- endif -%}
+
+      {%- if settings.card_second_image and second -%}
+        <img class="card__img--secondary lazy-img"
+             src="{{ second | image_url: width: 700 }}"
+             sizes="(max-width: 749px) 50vw, 25vw"
+             alt="{{ second.alt | escape }}" loading="lazy">
+      {%- endif -%}
+
+      <div class="card__badges">
+        {%- if product.compare_at_price > product.price -%}<span class="badge badge--sale">Sale</span>{%- endif -%}
+        {%- unless product.available -%}<span class="badge">Sold out</span>{%- endunless -%}
+      </div>
+
+      {%- if settings.card_quick_add and product.available -%}
+        <div class="card__quick-add">
+          {%- if product.has_only_default_variant -%}
+            {%- form 'product', product, data-quick-add-form: '' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" class="btn btn--full">{% render 'icon', name: 'plus', size: 18 %} Quick add</button>
+            {%- endform -%}
+          {%- else -%}
+            {%- comment -%} Multiple variants: send to product page to choose {%- endcomment -%}
+            <a href="{{ product.url }}" class="btn btn--full">{% render 'icon', name: 'plus', size: 18 %} Choose options</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+  <div class="card__body">
+    {%- if product.metafields.reviews.rating.value -%}
+      {% render 'star-rating', rating: product.metafields.reviews.rating.value, count: product.metafields.reviews.rating_count %}
+    {%- endif -%}
+    <a href="{{ product.url }}" class="card__title">{{ product.title }}</a>
+    {% render 'price', product: product, show_save: true %}
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<article class="section">
+  <div class="page-width page-width--narrow" data-reveal-group>
+    <header class="section-header text-center">
+      <span class="eyebrow" data-reveal>{{ article.published_at | date: '%B %d, %Y' }}</span>
+      <h1 data-reveal>{{ article.title }}</h1>
+    </header>
+    {%- if article.image -%}
+      <div class="media media--landscape" data-reveal style="margin-bottom:2.5rem;">
+        <img src="{{ article.image | image_url: width: 1400 }}" alt="{{ article.title | escape }}">
+      </div>
+    {%- endif -%}
+    <div class="rte" data-reveal>{{ article.content }}</div>
+  </div>
+</article>
+{% schema %}
+{ "name": "Article" }
+{% endschema %}

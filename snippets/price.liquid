@@ -1,0 +1,23 @@
+{%- comment -%}
+  Renders price w/ compare-at + savings. Params: product (or variant), show_save
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product
+  if product and variant == nil
+    assign target = product.selected_or_first_available_variant
+  endif
+  assign money = target.price
+  assign compare = target.compare_at_price
+-%}
+<span class="price" data-price>
+  {%- if compare > money -%}
+    <span class="price__sale">{{ money | money }}</span>
+    <s class="price__compare">{{ compare | money }}</s>
+    {%- if show_save -%}
+      {%- assign save = compare | minus: money | times: 100 | divided_by: compare -%}
+      <span class="price__save">Save {{ save }}%</span>
+    {%- endif -%}
+  {%- else -%}
+    <span>{{ money | money }}</span>
+  {%- endif -%}
+</span>

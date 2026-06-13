@@ -1,0 +1,54 @@
+<section class="section {% if section.settings.gradient %}bg-gradient{% endif %}">
+  <div class="page-width">
+    <div class="grid" style="grid-template-columns:{% if section.settings.text_position == 'side' %}1fr 1fr{% else %}1fr{% endif %};align-items:center;gap:clamp(2rem,5vw,4rem);">
+      <div class="{% if section.settings.text_position != 'side' %}section-header text-center{% endif %}" data-reveal-group>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="text-muted rte" data-reveal>{{ section.settings.text }}</div>{%- endif -%}
+        {%- if section.settings.note != blank -%}<p class="text-muted" data-reveal style="font-size:.8rem;margin-top:1rem;">{{ section.settings.note }}</p>{%- endif -%}
+      </div>
+
+      <div data-ba data-reveal="zoom" {% if section.settings.text_position != 'side' %}style="max-width:680px;margin-inline:auto;width:100%;"{% endif %}>
+        <div class="ba__compare" style="--ba-pos:{{ section.settings.start_position }}%;">
+          <div class="ba__img ba__before">
+            {%- if section.settings.before_image != blank -%}
+              <img src="{{ section.settings.before_image | image_url: width: 1200 }}" alt="Before">
+            {%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag }}{%- endif -%}
+          </div>
+          <div class="ba__img ba__after">
+            {%- if section.settings.after_image != blank -%}
+              <img src="{{ section.settings.after_image | image_url: width: 1200 }}" alt="After">
+            {%- else -%}{{ 'lifestyle-2' | placeholder_svg_tag }}{%- endif -%}
+          </div>
+          <span class="ba__label ba__label--before">{{ section.settings.before_label }}</span>
+          <span class="ba__label ba__label--after">{{ section.settings.after_label }}</span>
+          <div class="ba__divider"></div>
+          <div class="ba__handle" role="slider" aria-label="Drag to compare before and after" aria-valuemin="0" aria-valuemax="100">{% render 'icon', name: 'compare', size: 22 %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Before / After",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real results" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "See the difference" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Drag the slider to reveal the transformation after 4 weeks of daily use.</p>" },
+    { "type": "text", "id": "note", "label": "Disclaimer note", "default": "*Results may vary. Unretouched photos." },
+    { "type": "select", "id": "text_position", "label": "Text position", "options": [
+      {"value":"side","label":"Beside slider"},{"value":"top","label":"Above slider"}
+    ], "default": "side" },
+    { "type": "header", "content": "Images" },
+    { "type": "image_picker", "id": "before_image", "label": "Before image" },
+    { "type": "image_picker", "id": "after_image", "label": "After image" },
+    { "type": "text", "id": "before_label", "label": "Before label", "default": "Before" },
+    { "type": "text", "id": "after_label", "label": "After label", "default": "After" },
+    { "type": "range", "id": "start_position", "label": "Start position", "min": 10, "max": 90, "step": 5, "unit": "%", "default": 50 },
+    { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
+  ],
+  "presets": [{ "name": "Before / After" }]
+}
+{% endschema %}

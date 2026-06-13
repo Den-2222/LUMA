@@ -1,0 +1,70 @@
+{%- liquid
+  assign menu = section.settings.menu
+-%}
+<header class="header" data-header>
+  <div class="page-width">
+    <div class="header__inner">
+      <button class="header__toggle header__icon" data-mobile-nav-open aria-label="Open menu">
+        {% render 'icon', name: 'menu' %}
+      </button>
+
+      <nav class="header__nav" aria-label="Primary">
+        {%- for link in linklists[menu].links -%}
+          <li class="{% if link.links != blank %}has-dropdown{% endif %}">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- if link.links != blank -%}
+              <div class="dropdown">
+                {%- for child in link.links -%}
+                  <a href="{{ child.url }}">{{ child.title }}</a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </nav>
+
+      <a href="{{ routes.root_url }}" class="header__logo">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" width="200" height="{{ 200 | divided_by: section.settings.logo.aspect_ratio }}">
+        {%- else -%}
+          {{ section.settings.brand_name | default: shop.name }}
+        {%- endif -%}
+      </a>
+
+      <div class="header__actions">
+        {%- if section.settings.show_search -%}
+          <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">{% render 'icon', name: 'search', size: 22 %}</a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="header__icon" data-cart-open aria-label="Cart">
+          {% render 'icon', name: 'cart', size: 22 %}
+          <span class="cart-count {% if cart.item_count > 0 %}is-visible{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile nav drawer {%- endcomment -%}
+<nav class="mobile-nav" data-mobile-nav aria-label="Mobile">
+  <button class="mobile-nav__close header__icon" data-mobile-nav-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button>
+  {%- for link in linklists[menu].links -%}
+    <a href="{{ link.url }}">{{ link.title }}</a>
+    {%- if link.links != blank -%}
+      {%- for child in link.links -%}
+        <a href="{{ child.url }}" style="padding-left:1rem;font-size:1rem;opacity:.8;">{{ child.title }}</a>
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "text", "id": "brand_name", "label": "Brand name (if no logo)", "default": "LUMA" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true }
+  ]
+}
+{% endschema %}

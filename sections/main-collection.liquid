@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="page-width">
+    <div class="section-header text-center" data-reveal-group>
+      <h1 data-reveal>{{ collection.title | default: 'Shop all' }}</h1>
+      {%- if collection.description != blank and section.settings.show_description -%}
+        <div class="rte text-muted" data-reveal>{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- paginate collection.products by section.settings.per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr));" data-reveal-group>
+          {%- for product in collection.products -%}
+            {% render 'product-card', product: product, reveal: true %}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="text-center" style="margin-top:3rem;display:flex;gap:.5rem;justify-content:center;">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}<a href="{{ part.url }}" class="btn btn--secondary">{{ part.title }}</a>
+              {%- else -%}<span class="btn {% if part.title == paginate.current_page %}{% else %}btn--ghost{% endif %}">{{ part.title }}</span>{%- endif -%}
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="text-center text-muted">No products found.</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "settings": [
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 16 }
+  ]
+}
+{% endschema %}

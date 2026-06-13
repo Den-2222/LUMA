@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "title": {
+      "type": "rich-text",
+      "blocks": {
+        "h": { "type": "heading", "settings": { "text": "Frequently asked questions" } },
+        "t": { "type": "text", "settings": { "text": "<p>Everything you need to know about your LUMA ritual.</p>" } }
+      },
+      "block_order": ["h", "t"]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": { "heading": "", "eyebrow": "" },
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a visible glow within 2 weeks, with full results at 4–8 weeks.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes — fragrance-free and dermatologist tested.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "How should I store my products?", "answer": "<p>Keep them cool and out of direct sunlight.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "Do you ship internationally?", "answer": "<p>Yes, we ship to most countries worldwide.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    }
+  },
+  "order": ["title", "faq"]
+}

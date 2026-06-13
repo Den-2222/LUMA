@@ -1,0 +1,77 @@
+{%- comment -%}
+  Translates theme settings into CSS custom properties consumed by base.css.
+  Editing settings in the Theme Editor updates these live.
+{%- endcomment -%}
+{%- liquid
+  case settings.shadow_strength
+    when 'none'
+      assign shadow_sm = 'none'
+      assign shadow_md = 'none'
+      assign shadow_lg = 'none'
+    when 'soft'
+      assign shadow_sm = '0 2px 8px rgba(43,35,38,.05)'
+      assign shadow_md = '0 10px 30px rgba(43,35,38,.07)'
+      assign shadow_lg = '0 24px 60px rgba(43,35,38,.10)'
+    when 'medium'
+      assign shadow_sm = '0 3px 12px rgba(43,35,38,.08)'
+      assign shadow_md = '0 14px 40px rgba(43,35,38,.12)'
+      assign shadow_lg = '0 30px 80px rgba(43,35,38,.16)'
+    when 'lifted'
+      assign shadow_sm = '0 4px 16px rgba(43,35,38,.10)'
+      assign shadow_md = '0 18px 50px rgba(43,35,38,.16)'
+      assign shadow_lg = '0 40px 100px rgba(43,35,38,.22)'
+  endcase
+  assign speed = settings.anim_speed | times: 1.0 | divided_by: 100.0
+-%}
+<style>
+  :root {
+    --color-text: {{ settings.color_text }};
+    --color-bg: {{ settings.color_background }};
+    --color-surface: {{ settings.color_surface }};
+    --color-accent: {{ settings.color_accent }};
+    --color-accent-contrast: {{ settings.color_accent_contrast }};
+    --color-muted: {{ settings.color_muted }};
+    --color-border: {{ settings.color_border }};
+
+    --color-text-rgb: {{ settings.color_text | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --color-accent-rgb: {{ settings.color_accent | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --color-surface-rgb: {{ settings.color_surface | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --color-bg-rgb: {{ settings.color_background | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+
+    --grad-1: {{ settings.color_grad_1 }};
+    --grad-2: {{ settings.color_grad_2 }};
+    --grad-3: {{ settings.color_grad_3 }};
+    --grad-angle: {{ settings.gradient_angle }}deg;
+    --brand-gradient: linear-gradient(var(--grad-angle), var(--grad-1), var(--grad-2), var(--grad-3));
+
+    --font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+    --font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+    --font-heading-weight: {{ settings.font_heading.weight }};
+    --font-body-weight: {{ settings.font_body.weight }};
+    --heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+    --body-scale: {{ settings.font_body_scale | divided_by: 100.0 }};
+    --heading-transform: {{ settings.heading_transform }};
+    --heading-spacing: {{ settings.heading_letter_spacing }}px;
+
+    --page-width: {{ settings.page_width }}px;
+    --section-spacing: {{ settings.section_spacing }}px;
+    --radius: {{ settings.radius_base }}px;
+    --radius-media: {{ settings.radius_media }}px;
+    --radius-button: {{ settings.radius_button }}px;
+
+    --shadow-sm: {{ shadow_sm }};
+    --shadow-md: {{ shadow_md }};
+    --shadow-lg: {{ shadow_lg }};
+
+    --anim-speed: {{ speed }};
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+    --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+
+    --gutter: clamp(16px, 4vw, 40px);
+  }
+  {%- unless settings.animations_enabled %}
+  :root { --anim-speed: 0; }
+  {% endunless -%}
+</style>
+{%- if settings.font_heading %}{{ settings.font_heading | font_face: font_display: 'swap' }}{% endif -%}
+{%- if settings.font_body %}{{ settings.font_body | font_face: font_display: 'swap' }}{% endif -%}

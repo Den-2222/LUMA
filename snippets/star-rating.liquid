@@ -1,0 +1,15 @@
+{%- comment -%} Params: rating (0-5), count (optional) {%- endcomment -%}
+{%- liquid
+  assign r = rating | default: 5 | times: 1.0
+  assign full = r | floor
+-%}
+<span class="stars" role="img" aria-label="{{ r }} out of 5 stars">
+  {%- for i in (1..5) -%}
+    {%- if i <= full -%}
+      {% render 'icon', name: 'star', size: 16 %}
+    {%- else -%}
+      <span style="opacity:.25">{% render 'icon', name: 'star', size: 16 %}</span>
+    {%- endif -%}
+  {%- endfor -%}
+</span>
+{%- if count -%}<span class="text-muted" style="font-size:.85rem;margin-left:.4em;">({{ count }})</span>{%- endif -%}

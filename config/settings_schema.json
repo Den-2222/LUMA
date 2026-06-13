@@ -1,0 +1,367 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "LUMA",
+    "theme_version": "1.0.0",
+    "theme_author": "LUMA",
+    "theme_documentation_url": "https://shopify.com",
+    "theme_support_url": "https://shopify.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand palette"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#2b2326"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#fdf6f4"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Surface / cards",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent",
+        "default": "#e8a6b8"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_contrast",
+        "label": "Accent text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Muted text",
+        "default": "#8a7d80"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Borders",
+        "default": "#efe2e0"
+      },
+      {
+        "type": "header",
+        "content": "Gradients"
+      },
+      {
+        "type": "color",
+        "id": "color_grad_1",
+        "label": "Gradient color 1",
+        "default": "#fde7ee"
+      },
+      {
+        "type": "color",
+        "id": "color_grad_2",
+        "label": "Gradient color 2",
+        "default": "#fbd5e0"
+      },
+      {
+        "type": "color",
+        "id": "color_grad_3",
+        "label": "Gradient color 3",
+        "default": "#f6c6d9"
+      },
+      {
+        "type": "range",
+        "id": "gradient_angle",
+        "label": "Gradient angle",
+        "min": 0,
+        "max": 360,
+        "step": 5,
+        "unit": "°",
+        "default": 135
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_heading_scale",
+        "label": "Heading scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "font_body_scale",
+        "label": "Body size",
+        "min": 90,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "select",
+        "id": "heading_transform",
+        "label": "Heading transform",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "uppercase", "label": "Uppercase" },
+          { "value": "lowercase", "label": "Lowercase" }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "label": "Heading letter spacing",
+        "min": -3,
+        "max": 6,
+        "step": 1,
+        "unit": "px",
+        "default": -1
+      }
+    ]
+  },
+  {
+    "name": "Layout & shape",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 1100,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "default": 1340
+      },
+      {
+        "type": "range",
+        "id": "section_spacing",
+        "label": "Section spacing",
+        "min": 40,
+        "max": 160,
+        "step": 4,
+        "unit": "px",
+        "default": 96
+      },
+      {
+        "type": "range",
+        "id": "radius_base",
+        "label": "Base corner radius",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "radius_media",
+        "label": "Media corner radius",
+        "min": 0,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "default": 28
+      },
+      {
+        "type": "range",
+        "id": "radius_button",
+        "label": "Button corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 40
+      },
+      {
+        "type": "select",
+        "id": "shadow_strength",
+        "label": "Shadow softness",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "soft", "label": "Soft" },
+          { "value": "medium", "label": "Medium" },
+          { "value": "lifted", "label": "Lifted" }
+        ],
+        "default": "soft"
+      }
+    ]
+  },
+  {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Master controls for the theme animation system. Individual sections can opt out."
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_enabled",
+        "label": "Enable scroll & hover animations",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "anim_tilt",
+        "label": "Enable 3D tilt on featured media",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "anim_parallax",
+        "label": "Enable parallax",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "anim_float",
+        "label": "Enable floating product media",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "anim_speed",
+        "label": "Animation speed",
+        "min": 50,
+        "max": 150,
+        "step": 10,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "checkbox",
+        "id": "anim_page_fade",
+        "label": "Fade page in on load",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Buttons",
+    "settings": [
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Hover style",
+        "options": [
+          { "value": "fill", "label": "Fill slide" },
+          { "value": "lift", "label": "Lift" },
+          { "value": "grow", "label": "Grow" }
+        ],
+        "default": "fill"
+      },
+      {
+        "type": "checkbox",
+        "id": "button_uppercase",
+        "label": "Uppercase labels",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_second_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Show quick add button",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          { "value": "natural", "label": "Natural" },
+          { "value": "square", "label": "Square (1:1)" },
+          { "value": "portrait", "label": "Portrait (4:5)" }
+        ],
+        "default": "portrait"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Slide-out drawer" },
+          { "value": "page", "label": "Page" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_bar",
+        "label": "Show free-shipping progress bar",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "$",
+        "default": 50
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon (32×32 recommended)"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube URL" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook URL" }
+    ]
+  }
+]

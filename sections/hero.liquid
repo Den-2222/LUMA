@@ -1,0 +1,88 @@
+{%- liquid
+  assign layout = section.settings.layout
+  assign light = section.settings.text_light
+-%}
+<section class="hero hero--{{ layout }} {% if section.settings.gradient_bg %}bg-gradient{% endif %}"
+  style="--hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+
+  {%- if layout == 'full' -%}
+    <div class="hero__media" {% if settings.anim_parallax and section.settings.parallax %}data-parallax="0.15"{% endif %}>
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false }}
+      {%- elsif section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.image.alt | escape }}" width="2000" height="{{ 2000 | divided_by: section.settings.image.aspect_ratio }}" fetchpriority="high">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    {%- if section.settings.overlay_opacity > 0 -%}<div class="hero__overlay"></div>{%- endif -%}
+  {%- endif -%}
+
+  {%- capture content -%}
+    <div class="hero__content hero__content--{{ section.settings.align }} {% if light %}hero__content--light{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal {% unless light %}{% else %}style="color:#fff"{% endunless %}>{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h1 class="hero__title" data-reveal data-reveal-delay>{{ section.settings.heading }}</h1>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="hero__text" data-reveal>{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.button_label != blank or section.settings.button2_label != blank -%}
+        <div class="hero__ctas" data-reveal>
+          {%- if section.settings.button_label != blank -%}
+            <a href="{{ section.settings.button_link }}" class="btn btn--large">{{ section.settings.button_label }} {% render 'icon', name: 'arrow', size: 18 %}</a>
+          {%- endif -%}
+          {%- if section.settings.button2_label != blank -%}
+            <a href="{{ section.settings.button2_link }}" class="btn btn--ghost btn--large">{{ section.settings.button2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endcapture -%}
+
+  {%- if layout == 'split' -%}
+    <div class="hero__media media-zoom" {% if settings.anim_tilt and section.settings.tilt %}data-tilt="4"{% endif %}>
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true, controls: false }}
+      {%- elsif section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 1200 }}" alt="{{ section.settings.image.alt | escape }}" {% if settings.anim_float and section.settings.float %}data-float{% endif %} fetchpriority="high">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    {{ content }}
+  {%- else -%}
+    <div class="page-width">{{ content }}</div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+      {"value":"full","label":"Full-bleed background"},
+      {"value":"split","label":"Split (media + text)"}
+    ], "default": "full" },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Video (overrides image)" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay (full-bleed)", "min": 0, "max": 70, "step": 5, "unit": "%", "default": 20 },
+    { "type": "checkbox", "id": "gradient_bg", "label": "Use brand gradient background", "default": false },
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New · clinically loved" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Skin that glows from within" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A clean, dewy routine designed to hydrate, plump and glow.</p>" },
+    { "type": "select", "id": "align", "label": "Alignment", "options": [
+      {"value":"left","label":"Left"},{"value":"center","label":"Center"}
+    ], "default": "left" },
+    { "type": "checkbox", "id": "text_light", "label": "Light text", "default": false },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "button_label", "label": "Primary button", "default": "Shop the glow" },
+    { "type": "url", "id": "button_link", "label": "Primary link" },
+    { "type": "text", "id": "button2_label", "label": "Secondary button" },
+    { "type": "url", "id": "button2_link", "label": "Secondary link" },
+    { "type": "header", "content": "Animation" },
+    { "type": "checkbox", "id": "parallax", "label": "Parallax media (full-bleed)", "default": true },
+    { "type": "checkbox", "id": "tilt", "label": "3D tilt (split)", "default": true },
+    { "type": "checkbox", "id": "float", "label": "Float media (split)", "default": true }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

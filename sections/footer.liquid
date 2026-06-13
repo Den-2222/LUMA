@@ -1,0 +1,90 @@
+<footer class="footer" style="{% if section.settings.bg %}background:{{ section.settings.bg }};{% endif %}{% if section.settings.text %}color:{{ section.settings.text }};{% endif %}">
+  <div class="page-width">
+    <div class="footer__top">
+      <div class="footer__brand" data-reveal>
+        <div class="footer__brand-name">{{ section.settings.brand_name | default: shop.name }}</div>
+        {%- if section.settings.tagline != blank -%}<p style="opacity:.8;max-width:320px;">{{ section.settings.tagline }}</p>{%- endif -%}
+
+        {%- if section.settings.newsletter_enabled -%}
+          <div class="footer__newsletter" style="margin-top:1.4rem;max-width:340px;">
+            <p style="font-size:.9rem;margin-bottom:.6rem;">{{ section.settings.newsletter_heading }}</p>
+            {%- form 'customer' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div style="display:flex;gap:.5rem;">
+                <input type="email" name="contact[email]" placeholder="Email address" required>
+                <button type="submit" class="btn" aria-label="Subscribe">{% render 'icon', name: 'arrow' %}</button>
+              </div>
+              {%- if form.posted_successfully? -%}<p style="margin-top:.6rem;font-size:.85rem;">Thanks for subscribing ✨</p>{%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+
+        <div class="footer__social">
+          {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" aria-label="Instagram">{% render 'icon', name: 'instagram', size: 18 %}</a>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" aria-label="TikTok">{% render 'icon', name: 'tiktok', size: 18 %}</a>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<a href="{{ settings.social_youtube }}" aria-label="YouTube">{% render 'icon', name: 'youtube', size: 18 %}</a>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<a href="{{ settings.social_facebook }}" aria-label="Facebook">{% render 'icon', name: 'facebook', size: 18 %}</a>{%- endif -%}
+        </div>
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu' -%}
+          <div class="footer__col" data-reveal {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <ul>
+              {%- for link in linklists[block.settings.menu].links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- elsif block.type == 'text' -%}
+          <div class="footer__col" data-reveal {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <div class="rte" style="opacity:.85;font-size:.92rem;">{{ block.settings.content }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}</span>
+      <span>{{ powered_by_link }}</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Background" },
+    { "type": "color", "id": "text", "label": "Text" },
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "LUMA" },
+    { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Glow-first skincare, crafted clean." },
+    { "type": "header", "content": "Newsletter" },
+    { "type": "checkbox", "id": "newsletter_enabled", "label": "Show newsletter", "default": true },
+    { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Join the glow list for 10% off" },
+    { "type": "header", "content": "Bottom bar" },
+    { "type": "text", "id": "copyright", "label": "Copyright note", "default": "All rights reserved." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "About" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Clean, effective skincare made to make you glow.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Footer" }]
+}
+{% endschema %}
