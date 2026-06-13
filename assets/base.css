@@ -262,9 +262,10 @@ p { margin: 0 0 1em; }
 .header__logo { justify-self: center; font-family: var(--font-heading); font-size: 1.6rem; letter-spacing: .14em; font-weight: 700; text-transform: uppercase; }
 .header__logo img { max-height: 42px; width: auto; }
 .header__nav { display: flex; gap: 1.6rem; align-items: center; }
+.header__nav ul { display: flex; gap: 1.6rem; align-items: center; list-style: none; margin: 0; padding: 0; }
 .header__nav a { position: relative; font-size: .92rem; padding-block: .3rem; }
-.header__nav > li > a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1.5px; width: 100%; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease-out); }
-.header__nav > li > a:hover::after { transform: scaleX(1); transform-origin: left; }
+.header__nav li > a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1.5px; width: 100%; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease-out); }
+.header__nav li > a:hover::after { transform: scaleX(1); transform-origin: left; }
 .header__actions { justify-self: end; display: flex; align-items: center; gap: 1.1rem; }
 .header__icon { position: relative; display: inline-flex; }
 .header__icon:hover { color: var(--color-accent); }

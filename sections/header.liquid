@@ -9,18 +9,20 @@
       </button>
 
       <nav class="header__nav" aria-label="Primary">
-        {%- for link in linklists[menu].links -%}
-          <li class="{% if link.links != blank %}has-dropdown{% endif %}">
-            <a href="{{ link.url }}">{{ link.title }}</a>
-            {%- if link.links != blank -%}
-              <div class="dropdown">
-                {%- for child in link.links -%}
-                  <a href="{{ child.url }}">{{ child.title }}</a>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
+        <ul>
+          {%- for link in linklists[menu].links -%}
+            <li class="{% if link.links != blank %}has-dropdown{% endif %}">
+              <a href="{{ link.url }}">{{ link.title }}</a>
+              {%- if link.links != blank -%}
+                <div class="dropdown">
+                  {%- for child in link.links -%}
+                    <a href="{{ child.url }}">{{ child.title }}</a>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
       </nav>
 
       <a href="{{ routes.root_url }}" class="header__logo">
