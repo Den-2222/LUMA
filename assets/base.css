@@ -273,8 +273,6 @@ p { margin: 0 0 1em; }
 .header__nav li > a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1.5px; width: 100%; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease-out); }
 .header__nav li > a:hover::after { transform: scaleX(1); transform-origin: left; }
 .header__actions { justify-self: end; display: flex; align-items: center; gap: 1.1rem; }
-.header__cta { padding: .55em 1.2em; font-size: .82rem; }
-@media (max-width: 989px) { .header__cta { display: none; } }
 .header__icon { position: relative; display: inline-flex; }
 .header__icon:hover { color: var(--color-accent); }
 .cart-count {
@@ -360,10 +358,6 @@ body.no-scroll { overflow: hidden; }
 }
 .fp__track::-webkit-scrollbar { display: none; }
 .fp__track > * { flex: 0 0 clamp(220px, 30%, 320px); scroll-snap-align: start; }
-.fp__track img { -webkit-user-drag: none; user-select: none; }
-@media (hover: hover) { .fp__track { cursor: grab; } }
-.fp__track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
-.fp__track.is-dragging a { pointer-events: none; }
 .fp__track--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); overflow: visible; }
 .fp__track--grid > * { flex: none; }
 .fp__arrow {

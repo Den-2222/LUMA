@@ -120,25 +120,8 @@
       const amount = () => Math.max(track.clientWidth * 0.8, 280);
       $('[data-carousel-next]', c)?.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
       $('[data-carousel-prev]', c)?.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
-
-      // Desktop click-and-drag to scroll (mouse only; touch keeps native swipe)
-      let down = false, startX = 0, startScroll = 0, moved = false;
-      track.addEventListener('pointerdown', (e) => {
-        if (e.pointerType !== 'mouse') return;
-        down = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft;
-        track.classList.add('is-dragging');
-      });
-      track.addEventListener('pointermove', (e) => {
-        if (!down) return;
-        const dx = e.clientX - startX;
-        if (Math.abs(dx) > 10) moved = true;   // only a real drag (>10px) counts, so taps still navigate
-        if (moved) track.scrollLeft = startScroll - dx;
-      });
-      const endDrag = () => { if (down) { down = false; track.classList.remove('is-dragging'); } };
-      track.addEventListener('pointerup', endDrag);
-      track.addEventListener('pointerleave', endDrag);
-      // Only swallow the click when an actual drag happened (never block a normal click on a card)
-      track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } moved = false; }, true);
+      // Arrows + native touch/trackpad swipe handle scrolling. No mouse-drag hijack,
+      // so clicking a product card always navigates to its page.
     });
   }
 
