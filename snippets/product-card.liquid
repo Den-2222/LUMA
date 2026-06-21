@@ -1,5 +1,5 @@
 {%- comment -%}
-  Product card with hover image swap + quick add. Param: product, reveal (bool)
+  Product card. Params: product, reveal (bool), eager (bool)
 {%- endcomment -%}
 {%- liquid
   assign ratio_class = ''
@@ -44,27 +44,29 @@
         {%- if product.compare_at_price > product.price -%}<span class="badge badge--sale">Sale</span>{%- endif -%}
         {%- unless product.available -%}<span class="badge">Sold out</span>{%- endunless -%}
       </div>
-
-      {%- if settings.card_quick_add and product.available -%}
-        <div class="card__quick-add">
-          {%- if product.has_only_default_variant -%}
-            {%- form 'product', product, data-quick-add-form: '' -%}
-              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-              <button type="submit" class="btn btn--full">{% render 'icon', name: 'plus', size: 18 %} Quick add</button>
-            {%- endform -%}
-          {%- else -%}
-            {%- comment -%} Multiple variants: send to product page to choose {%- endcomment -%}
-            <a href="{{ product.url }}" class="btn btn--full">{% render 'icon', name: 'plus', size: 18 %} Choose options</a>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
     </div>
   </a>
+
   <div class="card__body">
     {%- if product.metafields.reviews.rating.value -%}
       {% render 'star-rating', rating: product.metafields.reviews.rating.value, count: product.metafields.reviews.rating_count %}
     {%- endif -%}
     <a href="{{ product.url }}" class="card__title">{{ product.title }}</a>
     {% render 'price', product: product, show_save: true %}
+
+    {%- if settings.card_quick_add -%}
+      <div class="card__add">
+        {%- if product.available == false -%}
+          <button type="button" class="btn btn--full" disabled>Sold out</button>
+        {%- elsif product.has_only_default_variant -%}
+          {%- form 'product', product, data-quick-add-form: '' -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="btn btn--full">Buy now</button>
+          {%- endform -%}
+        {%- else -%}
+          <a href="{{ product.url }}" class="btn btn--full">Choose options</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </div>

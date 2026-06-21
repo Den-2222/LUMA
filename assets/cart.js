@@ -59,9 +59,9 @@
       .then((r) => r.json())
       .then((data) => {
         if (data.status) { toast(data.description || data.message); return; }
+        if (L.cartType === 'drawer') openDrawer();      // open instantly for a snappy feel
         return refresh().then(() => {
-          if (L.cartType === 'drawer') openDrawer();
-          else toast(L.strings ? L.strings.added : 'Added');
+          if (L.cartType !== 'drawer') toast(L.strings ? L.strings.added : 'Added');
         });
       })
       .catch(() => toast('Something went wrong'))
@@ -75,19 +75,30 @@
   });
   document.addEventListener('change', (e) => {
     const input = e.target.closest('[data-line-qty]');
-    if (input) updateLine(input.dataset.lineQty, parseInt(input.value, 10));
+    if (input) queueLine(input.dataset.lineQty, parseInt(input.value, 10));
   });
 
+  // Debounce rapid +/- clicks into a single request, with instant count feedback
+  const lineTimers = {};
+  function optimisticCount() {
+    let n = 0;
+    $$('[data-line-qty]').forEach((i) => { n += Math.max(0, parseInt(i.value, 10) || 0); });
+    $$('[data-cart-count]').forEach((el) => { el.textContent = n; el.classList.toggle('is-visible', n > 0); });
+  }
+  function queueLine(line, qty) {
+    optimisticCount();
+    clearTimeout(lineTimers[line]);
+    lineTimers[line] = setTimeout(() => updateLine(line, qty), 320);
+  }
+
   function updateLine(line, qty) {
-    if (drawer) drawer.classList.add('is-loading');
     fetch(routes.cart_change_url + '.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ line: parseInt(line, 10), quantity: qty })
     })
       .then((r) => r.json())
-      .then(() => refresh())
-      .finally(() => drawer && drawer.classList.remove('is-loading'));
+      .then((cart) => render(cart));
   }
 
   /* ---------- Refresh cart UI ---------- */

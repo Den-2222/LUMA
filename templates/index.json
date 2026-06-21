@@ -42,9 +42,13 @@
     "before-after": {
       "type": "before-after",
       "settings": {
-        "eyebrow": "Real results",
+        "eyebrow": "",
         "heading": "See the difference",
-        "text": "<p>Drag the slider to reveal the transformation after 4 weeks of daily use.</p>"
+        "text": "",
+        "note": "",
+        "text_position": "top",
+        "before_label": "Before",
+        "after_label": "After"
       }
     },
     "benefits": {
@@ -74,9 +78,12 @@
       "blocks": {
         "r1": { "type": "review", "settings": { "name": "Sarah M.", "title": "Holy grail glow", "text": "Two weeks in and my skin is so plump and glowy. This is a holy grail!" } },
         "r2": { "type": "review", "settings": { "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal. My makeup sits so much better now." } },
-        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth every penny", "text": "Gentle, effective, and my skin barrier finally feels happy." } }
+        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth every penny", "text": "Gentle, effective, and my skin barrier finally feels happy." } },
+        "r4": { "type": "review", "settings": { "name": "Olivia P.", "title": "My skin drinks it up", "text": "Dry patches gone in a week. I get compliments on my glow constantly now." } },
+        "r5": { "type": "review", "settings": { "name": "Emma T.", "title": "Never going back", "text": "I've tried everything — nothing hydrates like this without breaking me out." } },
+        "r6": { "type": "review", "settings": { "name": "Chloe B.", "title": "Glass skin unlocked", "text": "Two months in and my texture is smoother than ever. Worth every cent." } }
       },
-      "block_order": ["r1", "r2", "r3"]
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"]
     },
     "clinical": {
       "type": "clinical-results",

@@ -8,12 +8,12 @@
       <div class="product__media-col" data-gallery>
         <div class="product__gallery">
           <div class="product__main-media media-zoom" data-gallery-main
-            {% if section.settings.tilt and settings.anim_tilt %}data-tilt="4"{% endif %} data-reveal="zoom">
+            {% if section.settings.tilt and settings.anim_tilt %}data-tilt="4"{% endif %}>
             {%- if product.featured_media -%}
               {%- if product.featured_media.media_type == 'video' -%}
                 {{ product.featured_media | media_tag: autoplay: false, loop: true, controls: true }}
               {%- else -%}
-                <img data-variant-image src="{{ product.featured_media | image_url: width: 1200 }}" alt="{{ product.featured_media.alt | escape }}" width="1200" height="{{ 1200 | divided_by: product.featured_media.preview_image.aspect_ratio }}">
+                <img data-variant-image src="{{ product.featured_media | image_url: width: 1200 }}" alt="{{ product.featured_media.alt | escape }}" width="1200" height="{{ 1200 | divided_by: product.featured_media.preview_image.aspect_ratio }}" fetchpriority="high">
               {%- endif -%}
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag }}
