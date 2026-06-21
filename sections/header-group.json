@@ -13,7 +13,7 @@
     },
     "header": {
       "type": "header",
-      "settings": { "brand_name": "LUMA", "menu": "main-menu", "show_search": true, "cta_label": "Shop now" }
+      "settings": { "brand_name": "LUMA", "menu": "main-menu", "show_search": true, "cta_label": "" }
     }
   },
   "order": ["announcement-bar", "header"]

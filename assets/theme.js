@@ -131,14 +131,14 @@
       track.addEventListener('pointermove', (e) => {
         if (!down) return;
         const dx = e.clientX - startX;
-        if (Math.abs(dx) > 4) moved = true;
-        track.scrollLeft = startScroll - dx;
+        if (Math.abs(dx) > 10) moved = true;   // only a real drag (>10px) counts, so taps still navigate
+        if (moved) track.scrollLeft = startScroll - dx;
       });
       const endDrag = () => { if (down) { down = false; track.classList.remove('is-dragging'); } };
       track.addEventListener('pointerup', endDrag);
       track.addEventListener('pointerleave', endDrag);
-      // Swallow the click that ends a drag so cards don't navigate
-      track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+      // Only swallow the click when an actual drag happened (never block a normal click on a card)
+      track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } moved = false; }, true);
     });
   }
 
@@ -154,7 +154,7 @@
           thumbs.forEach((t) => t.classList.remove('is-active'));
           thumb.classList.add('is-active');
           const mediaHTML = thumb.dataset.media;
-          if (main && mediaHTML) { main.innerHTML = decodeURIComponent(mediaHTML); initLazy(); }
+          if (main && mediaHTML) { main.innerHTML = decodeURIComponent(mediaHTML.replace(/\+/g, '%20')); initLazy(); }
         });
       });
     });
