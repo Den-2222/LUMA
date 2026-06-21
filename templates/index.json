@@ -96,16 +96,6 @@
       },
       "block_order": ["s1", "s2", "s3", "s4"]
     },
-    "bundle": {
-      "type": "bundle-offer",
-      "settings": { "eyebrow": "Save more", "heading": "Build your glow ritual", "subheading": "Bundle your favourites and save up to 33%.", "freeship_note": "Free shipping on every order over $50", "gradient": true },
-      "blocks": {
-        "b1": { "type": "bundle", "settings": { "title": "The Essentials", "description": "Start your glow journey.", "features": "Hydrating serum\nGlow moisturizer", "price_override": 4900, "compare_override": 6400 } },
-        "b2": { "type": "bundle", "settings": { "title": "The Glow Ritual", "description": "Our best-selling routine.", "features": "Hydrating serum\nGlow moisturizer\nOvernight mask", "popular": true, "tag": "Most popular", "price_override": 7900, "compare_override": 11200 } },
-        "b3": { "type": "bundle", "settings": { "title": "The Full Edit", "description": "Everything you need to glow.", "features": "Hydrating serum\nGlow moisturizer\nOvernight mask\nLip treatment", "price_override": 9900, "compare_override": 14800 } }
-      },
-      "block_order": ["b1", "b2", "b3"]
-    },
     "faq": {
       "type": "faq",
       "blocks": {
@@ -117,5 +107,5 @@
       "block_order": ["q1", "q2", "q3", "q4"]
     }
   },
-  "order": ["hero", "trust", "featured", "before-after", "benefits", "ugc", "reviews", "clinical", "bundle", "faq"]
+  "order": ["hero", "trust", "featured", "before-after", "benefits", "ugc", "reviews", "clinical", "faq"]
 }
