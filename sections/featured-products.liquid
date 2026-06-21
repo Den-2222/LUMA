@@ -22,7 +22,7 @@
       <div class="fp__track {% if section.settings.layout == 'grid' %}fp__track--grid{% endif %}" data-carousel-track data-reveal-group>
         {%- if products.size > 0 -%}
           {%- for product in products limit: section.settings.limit -%}
-            {% render 'product-card', product: product, reveal: true %}
+            {% render 'product-card', product: product, reveal: false, eager: true %}
           {%- endfor -%}
         {%- else -%}
           {%- for i in (1..4) -%}

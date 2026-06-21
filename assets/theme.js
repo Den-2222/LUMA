@@ -120,6 +120,25 @@
       const amount = () => Math.max(track.clientWidth * 0.8, 280);
       $('[data-carousel-next]', c)?.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
       $('[data-carousel-prev]', c)?.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
+
+      // Desktop click-and-drag to scroll (mouse only; touch keeps native swipe)
+      let down = false, startX = 0, startScroll = 0, moved = false;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        down = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft;
+        track.classList.add('is-dragging');
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startScroll - dx;
+      });
+      const endDrag = () => { if (down) { down = false; track.classList.remove('is-dragging'); } };
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointerleave', endDrag);
+      // Swallow the click that ends a drag so cards don't navigate
+      track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     });
   }
 

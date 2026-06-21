@@ -34,6 +34,9 @@
       </a>
 
       <div class="header__actions">
+        {%- if section.settings.cta_label != blank -%}
+          <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn header__cta">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
         {%- if section.settings.show_search -%}
           <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">{% render 'icon', name: 'search', size: 22 %}</a>
         {%- endif -%}
@@ -66,7 +69,10 @@
     { "type": "image_picker", "id": "logo", "label": "Logo image" },
     { "type": "text", "id": "brand_name", "label": "Brand name (if no logo)", "default": "LUMA" },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
-    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true }
+    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true },
+    { "type": "header", "content": "Call-to-action button" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "info": "Leave empty to hide. e.g. Shop now", "default": "Shop now" },
+    { "type": "url", "id": "cta_link", "label": "Button link", "info": "Defaults to the catalog if empty." }
   ]
 }
 {% endschema %}

@@ -8,26 +8,36 @@
     when 'portrait' then assign ratio_class = 'media--portrait'
   endcase
   assign second = product.images[1]
+  assign img_loading = 'lazy'
+  assign lazy_class = ' lazy-img'
+  if eager
+    assign img_loading = 'eager'
+    assign lazy_class = ''
+  endif
 -%}
 <div class="card card--product" {% if reveal %}data-reveal{% endif %}>
   <a href="{{ product.url }}" class="card__media-link">
     <div class="card__media media media-zoom {{ ratio_class }}">
       {%- if product.featured_image -%}
-        <img class="card__img--primary lazy-img"
+        <img class="card__img--primary{{ lazy_class }}"
              src="{{ product.featured_image | image_url: width: 700 }}"
              srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 700 }} 700w"
              sizes="(max-width: 749px) 50vw, 25vw"
              width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
-             alt="{{ product.featured_image.alt | escape | default: product.title }}" loading="lazy">
+             alt="{{ product.featured_image.alt | escape | default: product.title }}" loading="{{ img_loading }}">
       {%- else -%}
         {{ 'product-1' | placeholder_svg_tag: 'card__img--primary' }}
       {%- endif -%}
 
       {%- if settings.card_second_image and second -%}
-        <img class="card__img--secondary lazy-img"
+        <img class="card__img--secondary{{ lazy_class }}"
              src="{{ second | image_url: width: 700 }}"
              sizes="(max-width: 749px) 50vw, 25vw"
-             alt="{{ second.alt | escape }}" loading="lazy">
+             alt="{{ second.alt | escape }}" loading="{{ img_loading }}">
+      {%- endif -%}
+
+      {%- if product.tags contains 'bestseller' or product.tags contains 'Bestseller' -%}
+        <span class="card__sticker">{% render 'icon', name: 'sparkle', size: 13 %} Bestseller</span>
       {%- endif -%}
 
       <div class="card__badges">

@@ -136,8 +136,8 @@ p { margin: 0 0 1em; }
 }
 
 /* ---------- Product card ---------- */
-.card--product { display: flex; flex-direction: column; }
-.card--product .card__media { position: relative; }
+.card--product { display: flex; flex-direction: column; border-radius: var(--radius-media); }
+.card--product .card__media { position: relative; border-radius: 0; }
 .card--product .card__img--secondary {
   position: absolute; inset: 0; opacity: 0;
   transition: opacity .45s ease, transform .8s var(--ease-out);
@@ -164,6 +164,18 @@ p { margin: 0 0 1em; }
 }
 .badge--sale { background: var(--color-text); }
 .card__badges { position: absolute; top: 12px; left: 12px; z-index: 2; display: flex; gap: 6px; }
+
+/* 3D "Bestseller" sticker (driven by a product tag: bestseller) */
+.card__sticker {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  display: inline-flex; align-items: center; gap: .3em;
+  padding: .42em .8em; border-radius: 999px;
+  font-size: .68rem; font-weight: 800; letter-spacing: .03em; text-transform: uppercase;
+  color: #fff; background: linear-gradient(135deg, #f8aecb 0%, #e8628f 100%);
+  box-shadow: 0 5px 12px rgba(232,98,143,.45), inset 0 1px 1px rgba(255,255,255,.6);
+  transform: rotate(6deg); transition: transform .35s var(--ease-out);
+}
+.card--product:hover .card__sticker { transform: rotate(0deg) scale(1.05); }
 
 /* ---------- Price ---------- */
 .price { display: inline-flex; align-items: baseline; gap: .5em; font-weight: 600; }
@@ -267,6 +279,8 @@ p { margin: 0 0 1em; }
 .header__nav li > a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1.5px; width: 100%; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease-out); }
 .header__nav li > a:hover::after { transform: scaleX(1); transform-origin: left; }
 .header__actions { justify-self: end; display: flex; align-items: center; gap: 1.1rem; }
+.header__cta { padding: .55em 1.2em; font-size: .82rem; }
+@media (max-width: 989px) { .header__cta { display: none; } }
 .header__icon { position: relative; display: inline-flex; }
 .header__icon:hover { color: var(--color-accent); }
 .cart-count {
@@ -352,6 +366,10 @@ body.no-scroll { overflow: hidden; }
 }
 .fp__track::-webkit-scrollbar { display: none; }
 .fp__track > * { flex: 0 0 clamp(220px, 30%, 320px); scroll-snap-align: start; }
+.fp__track img { -webkit-user-drag: none; user-select: none; }
+@media (hover: hover) { .fp__track { cursor: grab; } }
+.fp__track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+.fp__track.is-dragging a { pointer-events: none; }
 .fp__track--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); overflow: visible; }
 .fp__track--grid > * { flex: none; }
 .fp__arrow {
@@ -447,6 +465,12 @@ body.no-scroll { overflow: hidden; }
 /* ==========================================================================
    BUNDLE / OFFER
    ========================================================================== */
+.bundle-freeship {
+  display: inline-flex; align-items: center; gap: .5em; margin-top: 1rem;
+  padding: .5em 1.1em; border-radius: 999px; font-size: .85rem; font-weight: 600;
+  background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-sm);
+}
+.bundle-freeship svg { color: var(--color-accent); }
 .bundles__grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
 .bundle-card { position: relative; background: var(--color-surface); border-radius: var(--radius); padding: 2rem 1.6rem; box-shadow: var(--shadow-sm); border: 2px solid transparent; display:flex; flex-direction: column; gap: 1rem; transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out), border-color .3s; }
 .bundle-card.is-popular { border-color: var(--color-accent); box-shadow: var(--shadow-md); }
@@ -454,6 +478,7 @@ body.no-scroll { overflow: hidden; }
 .bundle-card__tag { position:absolute; top:-13px; left:50%; transform:translateX(-50%); }
 .bundle-card__media { border-radius: calc(var(--radius)*.7); overflow:hidden; aspect-ratio: 4/3; }
 .bundle-card__media img { width:100%; height:100%; object-fit:cover; }
+.bundle-card__placeholder { width:100%; height:100%; display:grid; place-items:center; background: var(--brand-gradient); color:#fff; }
 .bundle-card__price { display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
 .bundle-card__features { display:flex; flex-direction:column; gap:.5rem; margin-block:.5rem; }
 .bundle-card__feature { display:flex; gap:.5rem; align-items:flex-start; font-size:.92rem; }

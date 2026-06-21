@@ -4,6 +4,9 @@
       {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal>{{ section.settings.eyebrow }}</p>{%- endif -%}
       {%- if section.settings.heading != blank -%}<h2 data-reveal>{{ section.settings.heading }}</h2>{%- endif -%}
       {%- if section.settings.subheading != blank -%}<p class="text-muted" data-reveal>{{ section.settings.subheading }}</p>{%- endif -%}
+      {%- if section.settings.freeship_note != blank -%}
+        <p class="bundle-freeship" data-reveal>{% render 'icon', name: 'truck', size: 18 %} {{ section.settings.freeship_note }}</p>
+      {%- endif -%}
     </div>
 
     <div class="grid bundles__grid" data-reveal-group>
@@ -24,7 +27,7 @@
               <img class="lazy-img" src="{{ block.settings.image | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
             {%- elsif bundle_product.featured_image -%}
               <img class="lazy-img" src="{{ bundle_product.featured_image | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
-            {%- else -%}{{ 'product-2' | placeholder_svg_tag }}{%- endif -%}
+            {%- else -%}<div class="bundle-card__placeholder">{% render 'icon', name: 'sparkle', size: 44 %}</div>{%- endif -%}
           </div>
 
           <h3 class="h3" style="margin:0">{{ block.settings.title }}</h3>
@@ -73,6 +76,7 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Save more" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Build your glow ritual" },
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "Bundle and save up to 30% on your full routine." },
+    { "type": "text", "id": "freeship_note", "label": "Free-shipping note", "default": "Free shipping on every order over $50" },
     { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": true }
   ],
   "blocks": [{
