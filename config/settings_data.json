@@ -31,7 +31,7 @@
     "anim_page_fade": true,
     "button_style": "fill",
     "button_uppercase": false,
-    "card_second_image": true,
+    "card_second_image": false,
     "card_quick_add": true,
     "card_image_ratio": "portrait",
     "cart_type": "drawer",

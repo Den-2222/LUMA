@@ -293,7 +293,7 @@
         "type": "checkbox",
         "id": "card_second_image",
         "label": "Show second image on hover",
-        "default": true
+        "default": false
       },
       {
         "type": "checkbox",
