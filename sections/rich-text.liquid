@@ -1,5 +1,5 @@
 <section class="section {% if section.settings.gradient %}bg-gradient{% elsif section.settings.bg_surface %}bg-surface{% endif %}">
-  <div class="page-width page-width--narrow text-center" data-reveal-group>
+  <div class="page-width page-width--narrow {% if section.settings.align != 'left' %}text-center{% endif %}" data-reveal-group>
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'eyebrow' -%}<p class="eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
@@ -15,6 +15,10 @@
 {
   "name": "Rich text",
   "settings": [
+    { "type": "select", "id": "align", "label": "Alignment", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "left", "label": "Left" }
+    ], "default": "center" },
     { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": false },
     { "type": "checkbox", "id": "gradient", "label": "Gradient background", "default": false }
   ],

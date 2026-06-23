@@ -595,6 +595,32 @@ body.no-scroll { overflow: hidden; }
 .rte a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
 .rte ul { list-style: disc; padding-left: 1.2em; margin-bottom: 1em; }
 .rte ol { list-style: decimal; padding-left: 1.2em; margin-bottom: 1em; }
+.rte p { margin-bottom: 1em; }
+.rte h2, .rte h3, .rte h4 { margin: 1.6em 0 .5em; }
+.rte li { margin-bottom: .3em; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(2rem, 5vw, 4rem); margin-top: 2.5rem; align-items: start; }
+.contact__details { display: flex; flex-direction: column; gap: 1.4rem; }
+.contact__detail { display: flex; gap: .9rem; align-items: flex-start; }
+.contact__detail svg { color: var(--color-accent); flex: 0 0 auto; margin-top: .15em; }
+.contact__detail-label { font-weight: 600; }
+.contact__detail-value { color: var(--color-muted); }
+.contact__form-wrap { background: var(--color-surface); padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: var(--radius-media); box-shadow: var(--shadow-sm); }
+.contact__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.contact form label { display: block; margin-bottom: 1rem; }
+.contact form label span { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; }
+.contact form input, .contact form textarea {
+  width: 100%; padding: .8rem 1rem; border: 1px solid var(--color-border);
+  border-radius: var(--radius); background: var(--color-bg); font: inherit; color: inherit;
+}
+.contact form input:focus, .contact form textarea:focus { outline: 2px solid var(--color-accent); border-color: transparent; }
+.contact__success { background: rgba(var(--color-accent-rgb), .12); color: var(--color-text); padding: .9rem 1.1rem; border-radius: var(--radius); margin-bottom: 1.2rem; display: flex; align-items: center; gap: .5em; font-weight: 600; }
+.contact__error { color: #c0392b; margin-bottom: 1rem; }
+@media (max-width: 749px) {
+  .contact { grid-template-columns: 1fr; }
+  .contact__row { grid-template-columns: 1fr; }
+}
 
 @media (max-width: 749px) {
   .footer__top { grid-template-columns: 1fr 1fr; }

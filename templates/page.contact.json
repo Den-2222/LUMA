@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "eyebrow": "We're here to help",
+        "heading": "Get in touch",
+        "subheading": "Questions about your routine, an order, or a return? Our glow team replies within 24 hours (Mon–Fri).",
+        "button_label": "Send message",
+        "success_text": "Thanks! We've received your message and will reply within 24 hours."
+      },
+      "blocks": {
+        "d1": { "type": "detail", "settings": { "icon": "heart", "label": "Email us", "value": "hello@luma.com", "link": "mailto:hello@luma.com" } },
+        "d2": { "type": "detail", "settings": { "icon": "truck", "label": "Order & shipping help", "value": "Mon–Fri, 9am–6pm" } },
+        "d3": { "type": "detail", "settings": { "icon": "shield", "label": "30-day glow guarantee", "value": "Not in love? We'll refund you." } },
+        "d4": { "type": "detail", "settings": { "icon": "sparkle", "label": "Follow us", "value": "@luma" } }
+      },
+      "block_order": ["d1", "d2", "d3", "d4"]
+    }
+  },
+  "order": ["contact"]
+}
