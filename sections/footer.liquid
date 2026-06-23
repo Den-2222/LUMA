@@ -37,6 +37,20 @@
               {%- endfor -%}
             </ul>
           </div>
+        {%- elsif block.type == 'links' -%}
+          <div class="footer__col" data-reveal {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <ul>
+              {%- for i in (1..6) -%}
+                {%- assign lbl_key = 'label_' | append: i -%}
+                {%- assign url_key = 'url_' | append: i -%}
+                {%- assign lbl = block.settings[lbl_key] -%}
+                {%- if lbl != blank -%}
+                  <li><a href="{{ block.settings[url_key] | default: '#' }}">{{ lbl }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
         {%- elsif block.type == 'text' -%}
           <div class="footer__col" data-reveal {{ block.shopify_attributes }}>
             <h4>{{ block.settings.heading }}</h4>
@@ -74,6 +88,25 @@
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
         { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "links",
+      "name": "Link column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Help" },
+        { "type": "text", "id": "label_1", "label": "Link 1 text", "default": "Shipping & returns" },
+        { "type": "url", "id": "url_1", "label": "Link 1 URL" },
+        { "type": "text", "id": "label_2", "label": "Link 2 text", "default": "Contact us" },
+        { "type": "url", "id": "url_2", "label": "Link 2 URL" },
+        { "type": "text", "id": "label_3", "label": "Link 3 text", "default": "FAQ" },
+        { "type": "url", "id": "url_3", "label": "Link 3 URL" },
+        { "type": "text", "id": "label_4", "label": "Link 4 text" },
+        { "type": "url", "id": "url_4", "label": "Link 4 URL" },
+        { "type": "text", "id": "label_5", "label": "Link 5 text" },
+        { "type": "url", "id": "url_5", "label": "Link 5 URL" },
+        { "type": "text", "id": "label_6", "label": "Link 6 text" },
+        { "type": "url", "id": "url_6", "label": "Link 6 URL" }
       ]
     },
     {

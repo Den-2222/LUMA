@@ -6,7 +6,15 @@
       "type": "footer",
       "blocks": {
         "shop": { "type": "menu", "settings": { "heading": "Shop", "menu": "footer" } },
-        "help": { "type": "text", "settings": { "heading": "Help", "content": "<p>Shipping & returns<br>Contact us<br>FAQ</p>" } }
+        "help": {
+          "type": "links",
+          "settings": {
+            "heading": "Help",
+            "label_1": "Shipping & returns", "url_1": "/policies/refund-policy",
+            "label_2": "Contact us", "url_2": "/pages/contact",
+            "label_3": "FAQ", "url_3": "/pages/faq"
+          }
+        }
       },
       "block_order": ["shop", "help"],
       "settings": { "brand_name": "LUMA" }
