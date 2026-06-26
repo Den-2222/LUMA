@@ -10,9 +10,10 @@
       </div>
     </div>
 
-    <div class="grid reviews__grid" data-reveal-group>
+    {%- assign visible = section.settings.visible_count | default: 6 -%}
+    <div class="grid reviews__grid" data-reviews-grid data-reveal-group>
       {%- for block in section.blocks -%}
-        <article class="review-card" data-reveal {{ block.shopify_attributes }}>
+        <article class="review-card {% if forloop.index > visible %}review-card--hidden{% endif %}" data-reveal {{ block.shopify_attributes }}>
           {% render 'star-rating', rating: block.settings.rating %}
           {%- if block.settings.title != blank -%}<h3 class="h4" style="margin:0">{{ block.settings.title }}</h3>{%- endif -%}
           {%- if block.settings.image != blank or block.settings.video != blank -%}
@@ -40,7 +41,11 @@
       {%- endfor -%}
     </div>
 
-    {%- if section.settings.button_label != blank -%}
+    {%- if section.blocks.size > visible -%}
+      <div class="text-center" data-reveal style="margin-top:2.5rem;">
+        <button type="button" class="btn btn--secondary" data-reviews-more>{{ section.settings.button_label | default: 'Read more reviews' }}</button>
+      </div>
+    {%- elsif section.settings.button_label != blank and section.settings.button_link != blank -%}
       <div class="text-center" data-reveal style="margin-top:2.5rem;">
         <a href="{{ section.settings.button_link }}" class="btn btn--secondary">{{ section.settings.button_label }}</a>
       </div>
@@ -57,8 +62,9 @@
     { "type": "text", "id": "avg_rating", "label": "Average rating", "default": "4.9" },
     { "type": "text", "id": "review_count", "label": "Review count", "default": "2,480" },
     { "type": "checkbox", "id": "bg_surface", "label": "Surface background", "default": true },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Read all reviews" },
-    { "type": "url", "id": "button_link", "label": "Button link" }
+    { "type": "range", "id": "visible_count", "label": "Reviews shown before \"more\"", "min": 3, "max": 12, "step": 1, "default": 6 },
+    { "type": "text", "id": "button_label", "label": "Show-more button label", "default": "Read more reviews" },
+    { "type": "url", "id": "button_link", "label": "Button link (only used if all reviews already shown)" }
   ],
   "blocks": [{
     "type": "review", "name": "Review", "settings": [

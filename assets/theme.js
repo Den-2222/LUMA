@@ -223,6 +223,18 @@
     input.dispatchEvent(new Event('change', { bubbles: true }));
   });
 
+  /* ---------- Reviews: reveal hidden cards (bound ONCE) ---------- */
+  document.addEventListener('click', (e) => {
+    const more = e.target.closest('[data-reviews-more]');
+    if (!more) return;
+    const scope = more.closest('.shopify-section') || document;
+    $$('.review-card--hidden', scope).forEach((c) => {
+      c.classList.remove('review-card--hidden');
+      c.classList.add('is-revealed');
+    });
+    if (more.parentElement) more.parentElement.style.display = 'none';
+  });
+
   /* ---------- Smooth scroll-to-content (hero button / chevron, bound ONCE) ---------- */
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('[data-scroll-next]');
@@ -282,6 +294,39 @@
     items.filter((i) => i.hasAttribute('data-ugc-autoplay')).forEach((i) => io.observe(i));
   }
 
+  /* ---------- Impulse promo popup (once per session, on scroll depth) ---------- */
+  function initPromoPop() {
+    const pop = $('[data-promo-pop]');
+    if (!pop || pop.dataset.bound) return;
+    pop.dataset.bound = '1';
+    const trigger = parseInt(pop.dataset.promoScroll, 10) || 55;
+    function close() {
+      pop.classList.remove('is-open');
+      document.body.classList.remove('no-scroll');
+      setTimeout(() => { pop.hidden = true; }, 350);
+    }
+    function open() {
+      if (pop.dataset.shown) return;
+      pop.dataset.shown = '1';
+      sessionStorage.setItem('luma_promo_seen', '1');
+      pop.hidden = false;
+      requestAnimationFrame(() => pop.classList.add('is-open'));
+      document.body.classList.add('no-scroll');
+    }
+    $$('[data-promo-close]', pop).forEach((b) => b.addEventListener('click', () => close()));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && pop.classList.contains('is-open')) close(); });
+    if (sessionStorage.getItem('luma_promo_seen')) return;
+    let ticking = false;
+    function onScroll() {
+      ticking = false;
+      const doc = document.documentElement;
+      const pct = ((window.scrollY + window.innerHeight) / doc.scrollHeight) * 100;
+      if (pct >= trigger) { open(); window.removeEventListener('scroll', scrollHandler); }
+    }
+    function scrollHandler() { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }
+    window.addEventListener('scroll', scrollHandler, { passive: true });
+  }
+
   /* ---------- Boot (element binders only; all guarded) ---------- */
   function boot() {
     initLazy();
@@ -294,6 +339,7 @@
     initVariants();
     initStickyATC();
     initUGC();
+    initPromoPop();
   }
   if (document.readyState !== 'loading') boot();
   else document.addEventListener('DOMContentLoaded', boot);
