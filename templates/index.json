@@ -75,27 +75,19 @@
     },
     "reviews": {
       "type": "reviews",
+      "settings": { "visible_count": 9 },
       "blocks": {
-        "r1": { "type": "review", "settings": { "name": "Sarah M.", "title": "Holy grail glow", "text": "Two weeks in and my skin is so plump and glowy. This is a holy grail!" } },
-        "r2": { "type": "review", "settings": { "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal. My makeup sits so much better now." } },
-        "r3": { "type": "review", "settings": { "name": "Mia R.", "title": "Worth every penny", "text": "Gentle, effective, and my skin barrier finally feels happy." } },
-        "r4": { "type": "review", "settings": { "name": "Olivia P.", "title": "My skin drinks it up", "text": "Dry patches gone in a week. I get compliments on my glow constantly now." } },
-        "r5": { "type": "review", "settings": { "name": "Emma T.", "title": "Never going back", "text": "I've tried everything — nothing hydrates like this without breaking me out." } },
-        "r6": { "type": "review", "settings": { "name": "Chloe B.", "title": "Glass skin unlocked", "text": "Two months in and my texture is smoother than ever. Worth every cent." } },
-        "r7": { "type": "review", "settings": { "name": "Sofia D.", "title": "Bye-bye dry skin", "text": "My winter flakiness is completely gone. Skin feels cushioned and soft all day." } },
-        "r8": { "type": "review", "settings": { "name": "Hannah K.", "title": "A glow-up in a bottle", "text": "People keep asking what I changed. This is it. The glow is real." } },
-        "r9": { "type": "review", "settings": { "name": "Isabella M.", "title": "Sensitive-skin approved", "text": "No stinging, no redness — finally a product my reactive skin loves." } },
-        "r10": { "type": "review", "settings": { "name": "Ava R.", "title": "Plump and dewy", "text": "My fine lines look softer and my skin bounces back. Obsessed isn't strong enough." } },
-        "r11": { "type": "review", "settings": { "name": "Lily W.", "title": "Repurchasing forever", "text": "Third bottle and counting. It's a permanent part of my routine now." } },
-        "r12": { "type": "review", "settings": { "name": "Grace T.", "title": "Makeup sits perfectly", "text": "My foundation glides on so smoothly now. No more dry patches peeking through." } },
-        "r13": { "type": "review", "settings": { "name": "Ella J.", "title": "Calmed my breakouts", "text": "My barrier feels strong and my skin is clearer than it's been in years." } },
-        "r14": { "type": "review", "settings": { "name": "Zoe P.", "title": "Worth the hype", "text": "I was skeptical but two weeks changed my mind. Hydration that actually lasts." } },
-        "r15": { "type": "review", "settings": { "name": "Maya S.", "title": "Soft, glowy, happy", "text": "My skin has never felt this nourished. The dewy finish is everything." } },
-        "r16": { "type": "review", "settings": { "name": "Nora L.", "title": "Gentle but powerful", "text": "Visible results without irritation. Exactly what my sensitive skin needed." } },
-        "r17": { "type": "review", "settings": { "name": "Ruby C.", "title": "Compliments daily", "text": "My glow is unreal. Best skincare purchase I've ever made, hands down." } },
-        "r18": { "type": "review", "settings": { "name": "Daisy F.", "title": "Hydration hero", "text": "Plump, bouncy, glowing skin from day one. I'll never run out of this." } }
+        "r1": { "type": "review", "settings": { "rating": 5, "name": "Sarah M.", "title": "Holy grail glow", "text": "Two weeks in and my skin is so plump and glowy. This is a holy grail!" } },
+        "r2": { "type": "review", "settings": { "rating": 5, "name": "Jenna L.", "title": "Obsessed", "text": "The hydration is unreal. My makeup sits so much better now." } },
+        "r3": { "type": "review", "settings": { "rating": 5, "name": "Mia R.", "title": "Worth every penny", "text": "Gentle, effective, and my skin barrier finally feels happy." } },
+        "r4": { "type": "review", "settings": { "rating": 5, "name": "Olivia P.", "title": "My skin drinks it up", "text": "Dry patches gone in a week. I get compliments on my glow constantly now." } },
+        "r5": { "type": "review", "settings": { "rating": 4, "name": "Emma T.", "title": "Really good — just slow for me", "text": "Lovely, hydrating cream. It took me closer to 4 weeks to see the glow, but my skin definitely loves it. Would buy again." } },
+        "r6": { "type": "review", "settings": { "rating": 5, "name": "Chloe B.", "title": "Glass skin unlocked", "text": "Two months in and my texture is smoother than ever. Worth every cent." } },
+        "r7": { "type": "review", "settings": { "rating": 4, "name": "Sofia D.", "title": "Love it, wish the jar was bigger", "text": "The cream itself is gorgeous and so hydrating — my only note is I go through it fast and wish it came in a bigger size. Still repurchasing." } },
+        "r8": { "type": "review", "settings": { "rating": 5, "name": "Hannah K.", "title": "A glow-up in a bottle", "text": "People keep asking what I changed. This is it. The glow is real." } },
+        "r9": { "type": "review", "settings": { "rating": 5, "name": "Isabella M.", "title": "Sensitive-skin approved", "text": "No stinging, no redness — finally a product my reactive skin loves." } }
       },
-      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15", "r16", "r17", "r18"]
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9"]
     },
     "clinical": {
       "type": "clinical-results",

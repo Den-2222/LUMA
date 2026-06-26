@@ -331,9 +331,12 @@ body.no-scroll { overflow: hidden; }
 .hero--full { min-height: 92vh; display: grid; }
 .hero--full > .page-width { max-width: none; padding-inline: clamp(20px, 6vw, 80px); }
 .hero__media { position: absolute; inset: 0; z-index: 0; }
-.hero__media img, .hero__media video { width: 100%; height: 100%; object-fit: cover; }
+.hero__media img, .hero__media video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .hero__overlay { position: absolute; inset: 0; background: rgba(var(--color-text-rgb), var(--hero-overlay, .15)); z-index: 1; }
 .hero__content { position: relative; z-index: 2; align-self: center; padding-block: 5rem; max-width: 620px; }
+.hero--full .hero__content { align-self: end; padding-bottom: clamp(4rem, 14vh, 9rem); max-width: 480px; }
+.hero--full .hero__title { font-size: clamp(2.2rem, 6vw, 3.4rem); margin-bottom: .6rem; }
+.hero--full .hero__text { font-size: 1.05rem; margin-bottom: 1.4rem; opacity: .92; }
 .hero__content--center { margin-inline: auto; text-align: center; }
 .hero__content--light { color: #fff; }
 .hero__title { margin-bottom: 1rem; }
