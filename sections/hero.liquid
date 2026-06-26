@@ -19,7 +19,8 @@
   {%- endif -%}
 
   {%- capture content -%}
-    <div class="hero__content hero__content--{{ section.settings.align }} {% if light %}hero__content--light{% endif %}">
+    <div class="hero__content hero__content--{{ section.settings.align }} {% if light %}hero__content--light{% endif %}"
+      style="transform: translateY({{ section.settings.content_offset | default: 0 }}px); max-width: {{ section.settings.content_width | default: 600 }}px;">
       {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" data-reveal {% unless light %}{% else %}style="color:#fff"{% endunless %}>{{ section.settings.eyebrow }}</p>{%- endif -%}
       {%- if section.settings.heading != blank -%}<h1 class="hero__title" data-reveal data-reveal-delay>{{ section.settings.heading }}</h1>{%- endif -%}
       {%- if section.settings.text != blank -%}<div class="hero__text" data-reveal>{{ section.settings.text }}</div>{%- endif -%}
@@ -81,6 +82,9 @@
       {"value":"left","label":"Left"},{"value":"center","label":"Center"}
     ], "default": "left" },
     { "type": "checkbox", "id": "text_light", "label": "Light text", "default": false },
+    { "type": "header", "content": "Content position" },
+    { "type": "range", "id": "content_offset", "label": "Content vertical offset", "min": -200, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Move the text block up (negative) or down (positive)." },
+    { "type": "range", "id": "content_width", "label": "Content max width", "min": 300, "max": 900, "step": 20, "unit": "px", "default": 600 },
     { "type": "header", "content": "Buttons" },
     { "type": "text", "id": "button_label", "label": "Primary button", "default": "Shop the glow" },
     { "type": "checkbox", "id": "button_scroll", "label": "Primary button scrolls to products", "default": true },
