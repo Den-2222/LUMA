@@ -1,43 +1,20 @@
 {
   "sections": {
-    "title": {
-      "type": "rich-text",
-      "settings": { "align": "center" },
+    "faq": {
+      "type": "faq",
+      "settings": { "eyebrow": "Good to know", "heading": "Shipping & Returns" },
       "blocks": {
-        "e": { "type": "eyebrow", "settings": { "text": "Good to know" } },
-        "h": { "type": "heading", "settings": { "text": "Shipping & Returns" } },
-        "t": { "type": "text", "settings": { "text": "<p>Everything about how your LUMA order gets to you — and our no-stress returns.</p>" } }
+        "s1": { "type": "qa", "settings": { "question": "How much does shipping cost?", "answer": "<p><strong>Free standard shipping on all orders over $50.</strong> Orders under $50 ship at a flat $4.95. Express delivery is available at checkout.</p>" } },
+        "s2": { "type": "qa", "settings": { "question": "How long will delivery take?", "answer": "<p>Orders are processed within 1–2 business days (Mon–Fri). Standard delivery then takes 3–6 business days, and express 1–3 business days.</p>" } },
+        "s3": { "type": "qa", "settings": { "question": "Do you ship internationally?", "answer": "<p>Yes, we ship worldwide. International delivery typically takes 7–14 business days. Any customs duties or import taxes are the recipient's responsibility.</p>" } },
+        "s4": { "type": "qa", "settings": { "question": "How do I track my order?", "answer": "<p>You'll receive a tracking link by email the moment your order ships. Please allow up to 48 hours for tracking to begin updating.</p>" } },
+        "s5": { "type": "qa", "settings": { "question": "What is your return policy?", "answer": "<p>We offer a 30-day glow guarantee. If you're not completely in love, return your items within 30 days of delivery for a full refund — even if they're opened.</p>" } },
+        "s6": { "type": "qa", "settings": { "question": "How do I start a return?", "answer": "<p>Email us at hello@luma.com with your order number and the items you'd like to return. We'll send a prepaid return label and simple instructions.</p>" } },
+        "s7": { "type": "qa", "settings": { "question": "When will I get my refund?", "answer": "<p>Once we receive your return, refunds are processed within 3–5 business days to your original payment method. Original shipping charges are non-refundable unless the return is due to our error.</p>" } },
+        "s8": { "type": "qa", "settings": { "question": "My order arrived damaged or incorrect — what now?", "answer": "<p>Email hello@luma.com within 7 days with a photo and your order number. We'll make it right with a replacement or full refund — no return shipping needed.</p>" } }
       },
-      "block_order": ["e", "h", "t"]
-    },
-    "shipping": {
-      "type": "rich-text",
-      "settings": { "align": "left" },
-      "blocks": {
-        "h": { "type": "heading", "settings": { "text": "Shipping" } },
-        "t": {
-          "type": "text",
-          "settings": {
-            "text": "<p><strong>Order processing.</strong> Orders are processed within 1–2 business days (Monday–Friday, excluding holidays). You'll receive a confirmation email with a tracking link as soon as your order ships.</p><p><strong>Rates and delivery.</strong></p><ul><li>Free standard shipping on all orders over $50.</li><li>Orders under $50 ship at a flat $4.95.</li><li>Standard delivery: 3–6 business days.</li><li>Express delivery: 1–3 business days (calculated at checkout).</li></ul><p><strong>International.</strong> We ship worldwide. International delivery typically takes 7–14 business days. Any customs duties or import taxes are the recipient's responsibility and are not included at checkout.</p><p><strong>Tracking.</strong> Once shipped, you'll receive a tracking number by email. Please allow up to 48 hours for tracking to begin updating.</p>"
-          }
-        }
-      },
-      "block_order": ["h", "t"]
-    },
-    "returns": {
-      "type": "rich-text",
-      "settings": { "align": "left", "bg_surface": true },
-      "blocks": {
-        "h": { "type": "heading", "settings": { "text": "Returns & refunds" } },
-        "t": {
-          "type": "text",
-          "settings": {
-            "text": "<p><strong>Our 30-day glow guarantee.</strong> If you're not completely in love, return your items within 30 days of delivery for a full refund — even if they're opened. Skincare is personal, and we get it.</p><p><strong>How to start a return.</strong></p><ul><li>Email us at hello@luma.com with your order number and the items to return.</li><li>We'll send a prepaid return label and simple instructions.</li><li>Pack the items securely and drop off your parcel using the label provided.</li></ul><p><strong>Refunds.</strong> Once we receive your return, refunds are processed within 3–5 business days to your original payment method. Original shipping charges are non-refundable unless the return is due to our error.</p><p><strong>Damaged or incorrect items.</strong> If anything arrives damaged, faulty, or incorrect, email hello@luma.com within 7 days with a photo and your order number. We'll make it right with a replacement or full refund — no return shipping needed.</p><p><strong>Questions?</strong> Reach our glow team any time at hello@luma.com and we'll reply within 24 hours (Mon–Fri).</p>"
-          }
-        }
-      },
-      "block_order": ["h", "t"]
+      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"]
     }
   },
-  "order": ["title", "shipping", "returns"]
+  "order": ["faq"]
 }

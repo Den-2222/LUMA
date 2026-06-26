@@ -99,12 +99,13 @@
     "faq": {
       "type": "faq",
       "blocks": {
-        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a visible glow within 2 weeks, with full results at 4–8 weeks.</p>" } },
-        "q2": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes — our formulas are fragrance-free and dermatologist tested.</p>" } },
-        "q3": { "type": "qa", "settings": { "question": "What's your return policy?", "answer": "<p>We offer a 30-day glow guarantee. Not in love? We'll refund you.</p>" } },
-        "q4": { "type": "qa", "settings": { "question": "Is it cruelty-free and vegan?", "answer": "<p>Always. LUMA is 100% vegan and never tested on animals.</p>" } }
+        "q1": { "type": "qa", "settings": { "question": "What if it doesn't work for me?", "answer": "<p>You're covered by our 30-day glow guarantee — if you're not in love, we'll refund you in full, even on opened products. Zero risk.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most see a visible glow within 2 weeks, with full results at 4–8 weeks of daily use.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes — fragrance-free, non-comedogenic and dermatologist tested. Gentle enough for daily use.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "When will my order arrive?", "answer": "<p>Free shipping over $50. Orders ship in 1–2 days and arrive in 3–6 business days, with tracking.</p>" } },
+        "q5": { "type": "qa", "settings": { "question": "Is it cruelty-free and vegan?", "answer": "<p>Always. LUMA is 100% vegan and never tested on animals.</p>" } }
       },
-      "block_order": ["q1", "q2", "q3", "q4"]
+      "block_order": ["q1", "q2", "q3", "q4", "q5"]
     }
   },
   "order": ["hero", "trust", "featured", "before-after", "benefits", "ugc", "reviews", "clinical", "faq"]

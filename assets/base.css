@@ -71,7 +71,7 @@ p { margin: 0 0 1em; }
 .bg-accent-soft { background: rgba(var(--color-accent-rgb), .08); }
 
 .grid { display: grid; gap: var(--gutter); }
-.section-header { max-width: 640px; margin: 0 auto 3rem; }
+.section-header { max-width: 640px; margin: 0 auto 2rem; }
 .section-header.text-center { margin-inline: auto; }
 
 /* ---------- Buttons ---------- */

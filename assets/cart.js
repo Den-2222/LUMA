@@ -124,9 +124,8 @@
     const list = $('[data-cart-items]');
     if (list) {
       if (cart.item_count === 0) {
-        list.innerHTML = '<div class="cart-empty"><p>Your bag is empty.</p><button class="btn" data-cart-close>Continue shopping</button></div>';
+        list.innerHTML = '<div class="cart-empty"><p>Your bag is empty.</p><a class="btn" href="/collections/all">Continue shopping</a></div>';
         $('[data-cart-foot]')?.setAttribute('hidden', '');
-        $('[data-cart-close]', list)?.addEventListener('click', closeDrawer);
       } else {
         $('[data-cart-foot]')?.removeAttribute('hidden');
         list.innerHTML = cart.items.map(lineItemHTML).join('');

@@ -1,51 +1,20 @@
 {
   "sections": {
-    "title": {
-      "type": "rich-text",
-      "settings": { "align": "center" },
-      "blocks": {
-        "e": { "type": "eyebrow", "settings": { "text": "Good to know" } },
-        "h": { "type": "heading", "settings": { "text": "Frequently asked questions" } },
-        "t": { "type": "text", "settings": { "text": "<p>Everything you need to know about your LUMA ritual, your order, and our promise to you.</p>" } }
-      },
-      "block_order": ["e", "h", "t"]
-    },
-    "faq_products": {
+    "faq": {
       "type": "faq",
-      "settings": { "eyebrow": "Products & skin", "heading": "Products & skin" },
+      "settings": { "eyebrow": "Good to know", "heading": "Frequently asked questions" },
       "blocks": {
-        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most people notice a visible glow and softer skin within 2 weeks. Full results — smoother texture and deeper hydration — typically appear at 4–8 weeks of daily use.</p>" } },
-        "q2": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes. Our formulas are fragrance-free, non-comedogenic and dermatologist tested. As with any new product, we recommend a quick patch test on your inner arm before first use.</p>" } },
-        "q3": { "type": "qa", "settings": { "question": "How do I use my products?", "answer": "<p>Apply to clean skin morning and night. Start with your lightest texture (serum) and finish with moisturizer. A little goes a long way — 2–3 drops or a pea-sized amount is plenty.</p>" } },
-        "q4": { "type": "qa", "settings": { "question": "Can I use it during pregnancy or breastfeeding?", "answer": "<p>Our core formulas are made with pregnancy-friendly ingredients, but every body is different — we always recommend checking with your doctor before starting any new skincare during pregnancy or breastfeeding.</p>" } },
-        "q5": { "type": "qa", "settings": { "question": "Is LUMA cruelty-free and vegan?", "answer": "<p>Always. LUMA is 100% vegan and never tested on animals — at any stage.</p>" } },
-        "q6": { "type": "qa", "settings": { "question": "How should I store my products?", "answer": "<p>Keep them somewhere cool and out of direct sunlight, with the lid closed. No need to refrigerate.</p>" } }
+        "q1": { "type": "qa", "settings": { "question": "How long until I see results?", "answer": "<p>Most people notice a visible glow and softer skin within 2 weeks. Full results — smoother texture and deeper hydration — appear at 4–8 weeks of daily use.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "What if it doesn't work for me?", "answer": "<p>You're covered by our 30-day glow guarantee. If you're not in love, email us within 30 days of delivery for a full refund — even on opened products. Zero risk.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "Is it suitable for sensitive skin?", "answer": "<p>Yes. Our formulas are fragrance-free, non-comedogenic and dermatologist tested. We still recommend a quick patch test before first use.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "Are your products cruelty-free and vegan?", "answer": "<p>Always. LUMA is 100% vegan and never tested on animals — at any stage.</p>" } },
+        "q5": { "type": "qa", "settings": { "question": "How much is shipping?", "answer": "<p>Shipping is <strong>free on all orders over $50</strong>. Orders under $50 ship at a flat $4.95. Express options are available at checkout.</p>" } },
+        "q6": { "type": "qa", "settings": { "question": "How long will my order take?", "answer": "<p>Orders are processed in 1–2 business days. Standard delivery then takes 3–6 business days; express 1–3 business days. You'll get a tracking link by email.</p>" } },
+        "q7": { "type": "qa", "settings": { "question": "Do you ship internationally?", "answer": "<p>Yes, we ship worldwide. International orders usually arrive within 7–14 business days.</p>" } },
+        "q8": { "type": "qa", "settings": { "question": "How do I use my products?", "answer": "<p>Apply to clean skin morning and night, lightest texture first. A little goes a long way — 2–3 drops or a pea-sized amount is plenty.</p>" } }
       },
-      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
-    },
-    "faq_orders": {
-      "type": "faq",
-      "settings": { "eyebrow": "Orders & shipping", "heading": "Orders & shipping", "bg_surface": true },
-      "blocks": {
-        "q1": { "type": "qa", "settings": { "question": "How much is shipping?", "answer": "<p>Shipping is <strong>free on all orders over $50</strong>. Orders under $50 ship at a flat $4.95. Express options are available at checkout.</p>" } },
-        "q2": { "type": "qa", "settings": { "question": "How long will my order take?", "answer": "<p>Orders are processed in 1–2 business days. Standard delivery then takes 3–6 business days, and express 1–3 business days.</p>" } },
-        "q3": { "type": "qa", "settings": { "question": "Do you ship internationally?", "answer": "<p>Yes, we ship worldwide. International orders usually arrive within 7–14 business days. Any customs or import fees are the recipient's responsibility.</p>" } },
-        "q4": { "type": "qa", "settings": { "question": "How do I track my order?", "answer": "<p>You'll get a tracking link by email the moment your order ships. Allow up to 48 hours for tracking to begin updating.</p>" } },
-        "q5": { "type": "qa", "settings": { "question": "What's your return policy?", "answer": "<p>We offer a 30-day glow guarantee. If you're not in love, email us within 30 days of delivery for a full refund — even on opened products. See our <a href=\"/pages/shipping\">Shipping & Returns</a> page for details.</p>" } },
-        "q6": { "type": "qa", "settings": { "question": "What payment methods do you accept?", "answer": "<p>We accept all major credit and debit cards, plus Shop Pay, Apple Pay, Google Pay and PayPal at checkout.</p>" } }
-      },
-      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
-    },
-    "cta": {
-      "type": "rich-text",
-      "settings": { "align": "center" },
-      "blocks": {
-        "h": { "type": "heading", "settings": { "text": "Still have a question?" } },
-        "t": { "type": "text", "settings": { "text": "<p>Our glow team replies within 24 hours.</p>" } },
-        "b": { "type": "button", "settings": { "label": "Contact us", "link": "/pages/contact" } }
-      },
-      "block_order": ["h", "t", "b"]
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"]
     }
   },
-  "order": ["title", "faq_products", "faq_orders", "cta"]
+  "order": ["faq"]
 }

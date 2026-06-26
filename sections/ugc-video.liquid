@@ -10,16 +10,13 @@
       {%- for block in section.blocks -%}
         <div class="ugc__item" data-ugc-item data-ugc-autoplay data-reveal {{ block.shopify_attributes }}>
           {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: image_size: '600x', loop: true, muted: true, controls: false, playsinline: true, class: 'ugc__video' }}
+            {{ block.settings.video | video_tag: image_size: '600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'ugc__video' }}
           {%- elsif block.settings.video_url != blank -%}
-            <video src="{{ block.settings.video_url }}" loop muted playsinline data-autoplay poster="{% if block.settings.poster %}{{ block.settings.poster | image_url: width: 600 }}{% endif %}"></video>
+            <video src="{{ block.settings.video_url }}" autoplay loop muted playsinline data-autoplay poster="{% if block.settings.poster %}{{ block.settings.poster | image_url: width: 600 }}{% endif %}"></video>
           {%- elsif block.settings.poster != blank -%}
             <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | escape }}">
           {%- else -%}
             {{ 'lifestyle-2' | placeholder_svg_tag }}
-          {%- endif -%}
-          {%- if block.settings.video != blank or block.settings.video_url != blank -%}
-            <button class="ugc__play" data-ugc-play aria-label="Play">{% render 'icon', name: 'play', size: 40 %}</button>
           {%- endif -%}
           {%- if block.settings.caption != blank -%}<span class="ugc__caption">{{ block.settings.caption }}</span>{%- endif -%}
         </div>
