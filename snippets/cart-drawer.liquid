@@ -43,6 +43,11 @@
         {%- endfor -%}
       {%- endif -%}
     </div>
+
+    <div class="cart-recs" data-cart-recs hidden>
+      <p class="cart-recs__title">You may also like</p>
+      <div data-cart-recs-list></div>
+    </div>
   </div>
 
   <div class="cart-drawer__foot" data-cart-foot {% if cart.item_count == 0 %}hidden{% endif %}>

@@ -131,7 +131,57 @@
         list.innerHTML = cart.items.map(lineItemHTML).join('');
       }
     }
+    renderRecs(cart);
   }
+
+  /* ---------- "You may also like" recommendations ---------- */
+  let recsLoadedFor = null;
+  function renderRecs(cart) {
+    const wrap = $('[data-cart-recs]');
+    if (!wrap) return;
+    if (cart.item_count === 0) { wrap.hidden = true; recsLoadedFor = null; return; }
+    const anchor = cart.items[0].product_id;
+    if (recsLoadedFor === anchor) return;
+    const base = routes.product_recommendations_url;
+    if (!base) { wrap.hidden = true; return; }
+    fetch(base + '.json?product_id=' + anchor + '&limit=6&intent=related', { headers: { Accept: 'application/json' } })
+      .then((r) => r.json())
+      .then((data) => {
+        const inCart = new Set(cart.items.map((i) => i.product_id));
+        const recs = (data.products || []).filter((p) => !inCart.has(p.id)).slice(0, 3);
+        const listEl = $('[data-cart-recs-list]', wrap);
+        if (!recs.length || !listEl) { wrap.hidden = true; return; }
+        recsLoadedFor = anchor;
+        listEl.innerHTML = recs.map(recHTML).join('');
+        wrap.hidden = false;
+      })
+      .catch(() => { wrap.hidden = true; });
+  }
+  function recHTML(p) {
+    const v = (p.variants || []).find((x) => x.available) || (p.variants || [])[0] || {};
+    const img = p.featured_image ? `<img src="${sizedImage(p.featured_image, 100)}" alt="${esc(p.title)}" loading="lazy">` : '';
+    const price = fmt(v.price != null ? v.price : p.price);
+    return `<div class="cart-rec">
+      <a href="${p.url}" class="cart-rec__img">${img}</a>
+      <div class="cart-rec__info"><a href="${p.url}" class="cart-rec__name">${esc(p.title)}</a><span class="price">${price}</span></div>
+      <button type="button" class="cart-rec__add" data-rec-add="${v.id || ''}" aria-label="Add ${esc(p.title)}">+</button>
+    </div>`;
+  }
+
+  // Add a recommended product (delegated, bound once)
+  document.addEventListener('click', (e) => {
+    const add = e.target.closest('[data-rec-add]');
+    if (!add || !add.dataset.recAdd) return;
+    add.disabled = true;
+    recsLoadedFor = null; // force recs to refresh after adding
+    fetch(routes.cart_add_url + '.js', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ id: add.dataset.recAdd, quantity: 1 })
+    })
+      .then((r) => r.json())
+      .then(() => refresh())
+      .finally(() => { add.disabled = false; });
+  });
 
   function lineItemHTML(item, i) {
     const line = i + 1;
