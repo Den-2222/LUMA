@@ -1,0 +1,35 @@
+[Unit]
+Description=Telegram finance Mini App API
+Documentation=https://github.com/Den-2222/LUMA
+After=network-online.target
+Wants=network-online.target
+# Не даємо циклу перезапусків з'їсти сервер, якщо токен невалідний
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=__USER__
+Group=__USER__
+WorkingDirectory=__APP_DIR__
+ExecStart=__APP_DIR__/.venv/bin/python -m uvicorn server.main:api --host 127.0.0.1 --port __PORT__ --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
+RestartSec=5
+
+# Мінімальні права: сервісу потрібен лише каталог з базою
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=__DATA_DIR__
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=finance-api
+
+[Install]
+WantedBy=multi-user.target

@@ -22,11 +22,7 @@ case "${1:-help}" in
     $PY -m tests.test_auth
     $PY -m tests.test_bot_flow
     ;;
-  backup)
-    mkdir -p backups
-    cp "${DB_PATH:-./data/finance.db}" "backups/finance-$(date +%F-%H%M).db"
-    echo "✅ Бекап у backups/"
-    ;;
+  backup)  exec $PY -m app.backup ;;
   *)
     echo "Команди: setup | bot | server | build | dev | test | backup"
     ;;

@@ -1,0 +1,48 @@
+# Mini App: nginx тримає TLS, uvicorn слухає лише на 127.0.0.1.
+# Після certbot --nginx цей файл буде доповнено блоком TLS автоматично.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN__;
+
+    access_log /var/log/nginx/finance-access.log;
+    error_log  /var/log/nginx/finance-error.log;
+
+    client_max_body_size 1m;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Заголовки безпеки. X-Frame-Options свідомо не ставимо:
+    # Telegram Desktop відкриває Mini App у фреймі й це його зламає.
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_http_version 1.1;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+    }
+
+    # Файли зі збірки мають хеш у назві — кешуємо надовго
+    location /assets/ {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_set_header Host $host;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        # index.html не кешуємо, інакше після оновлення побачиш стару версію
+        add_header Cache-Control "no-store";
+    }
+}
