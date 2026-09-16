@@ -60,6 +60,8 @@ cloudflared tunnel --url http://localhost:8080   # термінал 2: вида�
 sudo ./deploy/install.sh --domain groshi.твійдомен --token 123456:AA... --allow 111111,222222
 ```
 
+Домену немає? Підійде `--domain <IP-сервера>.sslip.io` — Let's Encrypt видає сертифікат і на таке ім'я.
+
 Покроково для DigitalOcean (який дроплет, DNS, фаєрвол), оновлення, відновлення з бекапу й розбір типових помилок — у [deploy/README.md](deploy/README.md).
 
 ---
