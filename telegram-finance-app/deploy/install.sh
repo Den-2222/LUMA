@@ -4,6 +4,8 @@
 #   sudo ./deploy/install.sh --domain groshi.example.com --token 123:AA... --allow 111,222
 #
 # Без --domain поставить лише бота (Mini App потребує HTTPS-домену).
+# --skip-build  — не збирати фронтенд на сервері (використає готовий webapp/dist)
+# --no-swap     — не чіпати swap навіть на дроплеті з малою пам'яттю
 set -euo pipefail
 
 APP_USER="finance"
@@ -14,6 +16,8 @@ TOKEN=""
 ALLOW=""
 EMAIL=""
 SKIP_TLS="false"
+SKIP_BUILD="false"
+NO_SWAP="false"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -25,6 +29,8 @@ while [[ $# -gt 0 ]]; do
     --dir)    APP_DIR="$2";  shift 2 ;;
     --port)   PORT="$2";     shift 2 ;;
     --skip-tls) SKIP_TLS="true"; shift ;;
+    --skip-build) SKIP_BUILD="true"; shift ;;
+    --no-swap) NO_SWAP="true"; shift ;;
     -h|--help)
       sed -n '2,8p' "$0"; exit 0 ;;
     *) echo "Невідомий аргумент: $1"; exit 1 ;;
@@ -52,19 +58,59 @@ id -u "$APP_USER" &>/dev/null || useradd --system --create-home --home-dir "/hom
 
 step "Код у $APP_DIR"
 mkdir -p "$APP_DIR" "$DATA_DIR"
-rsync -a --delete \
-  --exclude '.venv' --exclude 'node_modules' --exclude 'data' \
-  --exclude '.env' --exclude '__pycache__' --exclude 'webapp/dist' \
-  "$SOURCE_DIR/" "$APP_DIR/"
+RSYNC_EXCLUDES=(--exclude '.venv' --exclude 'node_modules' --exclude 'data' --exclude '.env' --exclude '__pycache__')
+# Готову збірку переносимо лише тоді, коли не збиратимемо її на сервері
+if [[ "$SKIP_BUILD" != "true" ]]; then RSYNC_EXCLUDES+=(--exclude 'webapp/dist'); fi
+rsync -a --delete "${RSYNC_EXCLUDES[@]}" "$SOURCE_DIR/" "$APP_DIR/"
 
 step "Python-залежності"
 python3 -m venv "$APP_DIR/.venv"
 "$APP_DIR/.venv/bin/pip" install -q --upgrade pip
 "$APP_DIR/.venv/bin/pip" install -q -r "$APP_DIR/requirements.txt"
 
+# На дроплеті з 512 МБ RAM npm install і vite build падають з OOM.
+# Гігабайта swap вистачає, щоб збірка пройшла (працює вона рідко, тож повільність не болить).
+ensure_swap() {
+  local mem_kb swap_kb total_mb
+  mem_kb=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)
+  swap_kb=$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)
+  total_mb=$(( (mem_kb + swap_kb) / 1024 ))
+  if (( total_mb >= ${SWAP_MIN_MB:-1400} )); then
+    echo "   RAM+swap = ${total_mb} МБ — додавати нічого не треба"
+    return 0
+  fi
+  if swapon --show --noheadings | grep -q /swapfile; then
+    echo "   /swapfile уже підключений"
+    return 0
+  fi
+  echo "   Пам'яті мало (${total_mb} МБ) — створюю /swapfile на 1 ГБ"
+  if [[ ! -f /swapfile ]]; then
+    fallocate -l 1G /swapfile 2>/dev/null || dd if=/dev/zero of=/swapfile bs=1M count=1024 status=none
+  fi
+  chmod 600 /swapfile
+  mkswap /swapfile >/dev/null 2>&1 || true
+  if swapon /swapfile 2>/dev/null; then
+    grep -q '^/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+    echo "   ✅ swap увімкнено (і додано в /etc/fstab)"
+  else
+    echo "   ⚠️  swap увімкнути не вдалось — якщо збірка впаде, збери фронтенд локально і запусти з --skip-build"
+  fi
+}
+
 step "Збірка Mini App"
-npm --prefix "$APP_DIR/webapp" ci --no-audit --no-fund 2>/dev/null || npm --prefix "$APP_DIR/webapp" install --no-audit --no-fund
-npm --prefix "$APP_DIR/webapp" run build
+if [[ "$SKIP_BUILD" == "true" ]]; then
+  if [[ -f "$APP_DIR/webapp/dist/index.html" ]]; then
+    echo "   --skip-build: беру готову збірку з webapp/dist"
+  else
+    echo "❌ --skip-build задано, але webapp/dist порожній."
+    echo "   Збери локально (npm --prefix webapp run build) і скопіюй dist на сервер."
+    exit 1
+  fi
+else
+  [[ "$NO_SWAP" == "true" ]] || ensure_swap
+  npm --prefix "$APP_DIR/webapp" ci --no-audit --no-fund 2>/dev/null || npm --prefix "$APP_DIR/webapp" install --no-audit --no-fund
+  npm --prefix "$APP_DIR/webapp" run build
+fi
 
 step "Конфіг .env"
 ENV_FILE="$APP_DIR/.env"
