@@ -15,7 +15,7 @@ from bot.handlers import build_router
 from bot.middlewares import AccessMiddleware
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-logger = logging.getLogger("finbot")
+logger = logging.getLogger("kapshuk")
 
 COMMANDS = [
     BotCommand(command="start", description="Головне меню"),
@@ -48,7 +48,7 @@ async def main() -> None:
         logger.warning("WEBAPP_URL не заданий — працює тільки бот (кнопки й текст).")
 
     me = await bot.get_me()
-    logger.info("Бот @%s запущено. Доступ: %s", me.username, config.allowed_users or "всі")
+    logger.info("Капшук @%s запущено. Доступ: %s", me.username, config.allowed_users or "всі")
     await bot.delete_webhook(drop_pending_updates=True)
     try:
         await dispatcher.start_polling(bot)

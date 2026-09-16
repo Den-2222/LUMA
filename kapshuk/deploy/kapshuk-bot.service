@@ -1,5 +1,5 @@
 [Unit]
-Description=Telegram finance Mini App API
+Description=Kapshuk — Telegram bot
 Documentation=https://github.com/Den-2222/LUMA
 After=network-online.target
 Wants=network-online.target
@@ -12,7 +12,7 @@ Type=simple
 User=__USER__
 Group=__USER__
 WorkingDirectory=__APP_DIR__
-ExecStart=__APP_DIR__/.venv/bin/python -m uvicorn server.main:api --host 127.0.0.1 --port __PORT__ --proxy-headers --forwarded-allow-ips 127.0.0.1
+ExecStart=__APP_DIR__/.venv/bin/python -m bot
 Restart=always
 RestartSec=5
 
@@ -29,7 +29,7 @@ LockPersonality=true
 
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=finance-api
+SyslogIdentifier=kapshuk-bot
 
 [Install]
 WantedBy=multi-user.target

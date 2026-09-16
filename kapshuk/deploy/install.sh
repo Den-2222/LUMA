@@ -8,8 +8,8 @@
 # --no-swap     — не чіпати swap навіть на дроплеті з малою пам'яттю
 set -euo pipefail
 
-APP_USER="finance"
-APP_DIR="/opt/finance-app"
+APP_USER="kapshuk"
+APP_DIR="/opt/kapshuk"
 PORT="8080"
 PORT_EXPLICIT="false"
 DOMAIN=""
@@ -132,7 +132,7 @@ CONFLICT
 fi
 
 # 3. Чи не займе хтось уже наше ім'я служби
-for existing in finance-bot finance-api; do
+for existing in kapshuk-bot kapshuk-api; do
   if systemctl list-unit-files 2>/dev/null | grep -q "^$existing.service" && [[ ! -f "$APP_DIR/.env" ]]; then
     echo "   ⚠️  Служба $existing вже є, але $APP_DIR порожній — перевір, чи це не інша установка"
   fi
@@ -237,7 +237,7 @@ ALLOWED_USERS=$ALLOW
 ADMIN_USERS=$ALLOW
 DEFAULT_CURRENCY=UAH
 TZ_NAME=Europe/Kyiv
-DB_PATH=$DATA_DIR/finance.db
+DB_PATH=$DATA_DIR/kapshuk.db
 HOST=127.0.0.1
 PORT=$PORT
 DEV_USER_ID=
@@ -248,7 +248,7 @@ chmod 600 "$ENV_FILE"
 chown -R "$APP_USER:$APP_USER" "$APP_DIR"
 
 step "Служби systemd"
-for unit in finance-bot.service finance-api.service finance-backup.service finance-backup.timer; do
+for unit in kapshuk-bot.service kapshuk-api.service kapshuk-backup.service kapshuk-backup.timer; do
   sed -e "s|__USER__|$APP_USER|g" \
       -e "s|__APP_DIR__|$APP_DIR|g" \
       -e "s|__DATA_DIR__|$DATA_DIR|g" \
@@ -256,19 +256,19 @@ for unit in finance-bot.service finance-api.service finance-backup.service finan
       "$SOURCE_DIR/deploy/$unit" > "/etc/systemd/system/$unit"
 done
 systemctl daemon-reload
-systemctl enable --now finance-bot.service
-systemctl enable --now finance-backup.timer
-if [[ -n "$DOMAIN" ]]; then systemctl enable --now finance-api.service; fi
+systemctl enable --now kapshuk-bot.service
+systemctl enable --now kapshuk-backup.timer
+if [[ -n "$DOMAIN" ]]; then systemctl enable --now kapshuk-api.service; fi
 
 if [[ -n "$DOMAIN" ]]; then
   step "nginx для $DOMAIN"
-  if [[ -f /etc/nginx/sites-available/finance ]]; then
-    cp /etc/nginx/sites-available/finance "/etc/nginx/sites-available/finance.bak.$(date +%s)"
-    echo "   наявний конфіг збережено як finance.bak.*"
+  if [[ -f /etc/nginx/sites-available/kapshuk ]]; then
+    cp /etc/nginx/sites-available/kapshuk "/etc/nginx/sites-available/kapshuk.bak.$(date +%s)"
+    echo "   наявний конфіг збережено як kapshuk.bak.*"
   fi
   sed -e "s|__DOMAIN__|$DOMAIN|g" -e "s|__PORT__|$PORT|g" \
-      "$SOURCE_DIR/deploy/nginx.conf.template" > /etc/nginx/sites-available/finance
-  ln -sf /etc/nginx/sites-available/finance /etc/nginx/sites-enabled/finance
+      "$SOURCE_DIR/deploy/nginx.conf.template" > /etc/nginx/sites-available/kapshuk
+  ln -sf /etc/nginx/sites-available/kapshuk /etc/nginx/sites-enabled/kapshuk
   # Стандартний сайт не чіпаємо: на сервері може вже щось хоститись,
   # а наш vhost і так має пріоритет за server_name.
   nginx -t && systemctl reload nginx
@@ -289,22 +289,22 @@ if [[ -n "$DOMAIN" ]]; then
 fi
 
 step "Стан"
-systemctl --no-pager --lines=0 status finance-bot.service || true
+systemctl --no-pager --lines=0 status kapshuk-bot.service || true
 if [[ -n "$DOMAIN" ]]; then
-  systemctl --no-pager --lines=0 status finance-api.service || true
+  systemctl --no-pager --lines=0 status kapshuk-api.service || true
 fi
 
 cat <<DONE
 
 ✅ Готово.
 
-   Бот:     sudo systemctl status finance-bot     · логи: journalctl -u finance-bot -f
-   API:     sudo systemctl status finance-api     · логи: journalctl -u finance-api -f
+   Бот:     sudo systemctl status kapshuk-bot     · логи: journalctl -u kapshuk-bot -f
+   API:     sudo systemctl status kapshuk-api     · логи: journalctl -u kapshuk-api -f
    Бекапи:  $DATA_DIR/backups (щодня о 04:30, зберігаються 14 останніх)
    Оновити: sudo ./deploy/install.sh $(if [[ -n "$DOMAIN" ]]; then echo "--domain $DOMAIN"; fi)
 
 DONE
 if ! grep -q '^BOT_TOKEN=.\+' "$ENV_FILE"; then
-  echo "⚠️  BOT_TOKEN порожній — впиши його у $ENV_FILE і зроби: sudo systemctl restart finance-bot"
+  echo "⚠️  BOT_TOKEN порожній — впиши його у $ENV_FILE і зроби: sudo systemctl restart kapshuk-bot"
 fi
 exit 0

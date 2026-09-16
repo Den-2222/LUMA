@@ -36,7 +36,7 @@ def _parse_ids(raw: str) -> set[int]:
 class Config:
     bot_token: str = os.getenv("BOT_TOKEN", "")
     webapp_url: str = os.getenv("WEBAPP_URL", "").rstrip("/")
-    db_path: Path = Path(os.getenv("DB_PATH", str(BASE_DIR / "data" / "finance.db")))
+    db_path: Path = Path(os.getenv("DB_PATH", str(BASE_DIR / "data" / "kapshuk.db")))
     default_currency: str = os.getenv("DEFAULT_CURRENCY", "UAH").upper()
     # Whitelist: порожній = пускати всіх (зручно, поки тестуєш наодинці).
     allowed_users: set[int] = field(default_factory=lambda: _parse_ids(os.getenv("ALLOWED_USERS", "")))

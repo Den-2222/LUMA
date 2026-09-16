@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-api = FastAPI(title="Finance Mini App", lifespan=lifespan, docs_url=None, redoc_url=None)
+api = FastAPI(title="Капшук", lifespan=lifespan, docs_url=None, redoc_url=None)
 
 
 class TransactionIn(BaseModel):

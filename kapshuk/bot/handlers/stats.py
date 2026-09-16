@@ -94,6 +94,6 @@ async def _send_export(message: Message, user: dict) -> None:
         ])
     payload = buffer.getvalue().encode("utf-8-sig")  # BOM, щоб Excel не ламав кирилицю
     await message.answer_document(
-        BufferedInputFile(payload, filename=f"finance-{current_month()}.csv"),
+        BufferedInputFile(payload, filename=f"kapshuk-{current_month()}.csv"),
         caption=f"📤 Експортовано записів: {len(transactions)}",
     )

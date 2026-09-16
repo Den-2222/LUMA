@@ -1,10 +1,10 @@
 [Unit]
-Description=Backup finance database
+Description=Backup Kapshuk database
 
 [Service]
 Type=oneshot
 User=__USER__
 Group=__USER__
 WorkingDirectory=__APP_DIR__
-Environment=DB_PATH=__DATA_DIR__/finance.db
+Environment=DB_PATH=__DATA_DIR__/kapshuk.db
 ExecStart=__APP_DIR__/.venv/bin/python -m app.backup __DATA_DIR__/backups

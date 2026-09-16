@@ -22,7 +22,7 @@ def main() -> None:
 
     target_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else source_path.parent / "backups"
     target_dir.mkdir(parents=True, exist_ok=True)
-    target = target_dir / f"finance-{date.today().isoformat()}.db"
+    target = target_dir / f"kapshuk-{date.today().isoformat()}.db"
 
     source = sqlite3.connect(source_path)
     destination = sqlite3.connect(target)
@@ -32,7 +32,7 @@ def main() -> None:
         destination.close()
         source.close()
 
-    old = sorted(target_dir.glob("finance-*.db"))[:-KEEP]
+    old = sorted(target_dir.glob("kapshuk-*.db"))[:-KEEP]
     for path in old:
         path.unlink()
 

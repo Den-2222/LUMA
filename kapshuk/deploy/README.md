@@ -11,7 +11,7 @@ Ubuntu/Debian + systemd. Один прогін ставить бота, API, ngi
 ## Установка
 
 ```bash
-git clone <репозиторій> finance && cd finance/telegram-finance-app
+git clone <репозиторій> kapshuk && cd kapshuk/kapshuk
 sudo ./deploy/install.sh \
   --domain groshi.твійдомен \
   --token 123456:AA... \
@@ -22,10 +22,10 @@ sudo ./deploy/install.sh \
 Що зробить скрипт:
 
 - поставить пакети (python3-venv, nodejs, nginx, certbot);
-- створить системного користувача `finance` без shell;
-- покладе код у `/opt/finance-app`, збере Mini App;
+- створить системного користувача `kapshuk` без shell;
+- покладе код у `/opt/kapshuk`, збере Mini App;
 - згенерує `.env` з правами `600`;
-- підніме `finance-bot` і `finance-api` під systemd з автозапуском і рестартом при падінні;
+- підніме `kapshuk-bot` і `kapshuk-api` під systemd з автозапуском і рестартом при падінні;
 - налаштує nginx-проксі й візьме сертифікат Let's Encrypt (продовжується сам);
 - увімкне щоденний бекап о 04:30 з ротацією (14 останніх копій).
 
@@ -34,31 +34,31 @@ sudo ./deploy/install.sh \
 ## Щоденне життя
 
 ```bash
-sudo systemctl status finance-bot           # стан
-sudo journalctl -u finance-bot -f           # логи бота
-sudo journalctl -u finance-api -f           # логи API
-sudo systemctl restart finance-bot          # після зміни .env
+sudo systemctl status kapshuk-bot           # стан
+sudo journalctl -u kapshuk-bot -f           # логи бота
+sudo journalctl -u kapshuk-api -f           # логи API
+sudo systemctl restart kapshuk-bot          # після зміни .env
 ```
 
 **Оновити код** — повторний запуск того самого скрипта; `.env` і база не постраждають:
 
 ```bash
-cd ~/finance && git pull
+cd ~/kapshuk && git pull
 sudo ./deploy/install.sh --domain groshi.твійдомен
 ```
 
 Аргументи оновлюють лише те, що передано: `--token` перепише токен, `--allow` — список доступу, `--domain` — адресу Mini App. Решта рядків `.env` лишається як була.
 
-**Бекапи:** `/opt/finance-app/data/backups/`. Разовий: `sudo systemctl start finance-backup`.
+**Бекапи:** `/opt/kapshuk/data/backups/`. Разовий: `sudo systemctl start kapshuk-backup`.
 Відновлення — просто покласти файл назад:
 
 ```bash
-sudo systemctl stop finance-bot finance-api
-sudo -u finance cp /opt/finance-app/data/backups/finance-2026-09-01.db /opt/finance-app/data/finance.db
-sudo systemctl start finance-bot finance-api
+sudo systemctl stop kapshuk-bot kapshuk-api
+sudo -u kapshuk cp /opt/kapshuk/data/backups/kapshuk-2026-09-01.db /opt/kapshuk/data/kapshuk.db
+sudo systemctl start kapshuk-bot kapshuk-api
 ```
 
-Копії варто інколи забирати з сервера до себе: `scp сервер:/opt/finance-app/data/backups/*.db ./`
+Копії варто інколи забирати з сервера до себе: `scp сервер:/opt/kapshuk/data/backups/*.db ./`
 
 ## DigitalOcean: покроково
 
@@ -105,7 +105,7 @@ sudo ufw --force enable
 ```bash
 ssh root@IP-дроплета
 apt update && apt install -y git
-git clone <репозиторій> finance && cd finance/telegram-finance-app
+git clone <репозиторій> kapshuk && cd kapshuk/kapshuk
 ./deploy/install.sh --domain groshi.твійдомен --token 123456:AA... --allow 111111,222222
 ```
 
@@ -114,7 +114,7 @@ git clone <репозиторій> finance && cd finance/telegram-finance-app
 **Бекапи.** Локальні копії робляться щодня самі, але вони лежать на тому ж диску. Раз на тиждень забирай до себе:
 
 ```bash
-scp root@IP:/opt/finance-app/data/backups/*.db ~/finance-backups/
+scp root@IP:/opt/kapshuk/data/backups/*.db ~/kapshuk-backups/
 ```
 
 Снапшоти DO ($1–2/міс за увімкнені backups) рятують від смерті дроплета, але для бази достатньо й цих файлів — вона важить кілограми на рівні мегабайта.
@@ -130,7 +130,7 @@ scp root@IP:/opt/finance-app/data/backups/*.db ~/finance-backups/
 - локальний порт зайнятий → бере наступний вільний (або відмовляє, якщо порт задано через `--port`);
 - 80-й порт тримає nginx → просто додає ще один сайт, наявні не чіпає;
 - 80-й порт тримає щось інше (Apache, Caddy, Docker) → зупиняється й пояснює варіанти;
-- наявний конфіг nginx з такою назвою → зберігає копію `finance.bak.*`.
+- наявний конфіг nginx з такою назвою → зберігає копію `kapshuk.bak.*`.
 
 Подивитись, що на сервері зараз, можна й вручну:
 
@@ -147,8 +147,8 @@ systemctl list-units --type=service --state=running | head -20
 | `--token` | BOT_TOKEN у `.env` |
 | `--allow` | Список Telegram ID через кому |
 | `--email` | Пошта для Let's Encrypt (нагадає, коли сертифікат протухне) |
-| `--dir` | Куди ставити (типово `/opt/finance-app`) |
-| `--user` | Від кого запускати служби (типово `finance`) |
+| `--dir` | Куди ставити (типово `/opt/kapshuk`) |
+| `--user` | Від кого запускати служби (типово `kapshuk`) |
 | `--port` | Локальний порт uvicorn (типово 8080) |
 | `--skip-build` | Не збирати фронтенд на сервері — взяти готовий `webapp/dist` |
 | `--no-swap` | Не створювати swap навіть на дроплеті з малою пам'яттю |
@@ -167,7 +167,7 @@ systemctl list-units --type=service --state=running | head -20
 | Симптом | Причина й що робити |
 |---|---|
 | `certbot` не видав сертифікат | A-запис ще не розійшовся або 80-й порт закритий. Перевір `dig +short домен`, потім `sudo certbot --nginx -d домен` |
-| Бот не відповідає | `journalctl -u finance-bot -n 50`. Найчастіше — порожній або невірний `BOT_TOKEN` |
-| Кнопки «Застосунок» нема в меню | `WEBAPP_URL` порожній у `.env` → впиши й `sudo systemctl restart finance-bot` |
+| Бот не відповідає | `journalctl -u kapshuk-bot -n 50`. Найчастіше — порожній або невірний `BOT_TOKEN` |
+| Кнопки «Застосунок» нема в меню | `WEBAPP_URL` порожній у `.env` → впиши й `sudo systemctl restart kapshuk-bot` |
 | Mini App пише «Немає доступу» | Відкрито не через Telegram, або твого ID немає в `ALLOWED_USERS` |
-| 502 від nginx | `finance-api` не запущений: `sudo systemctl status finance-api` |
+| 502 від nginx | `kapshuk-api` не запущений: `sudo systemctl status kapshuk-api` |

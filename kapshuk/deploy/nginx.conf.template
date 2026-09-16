@@ -6,8 +6,8 @@ server {
     listen [::]:80;
     server_name __DOMAIN__;
 
-    access_log /var/log/nginx/finance-access.log;
-    error_log  /var/log/nginx/finance-error.log;
+    access_log /var/log/nginx/kapshuk-access.log;
+    error_log  /var/log/nginx/kapshuk-error.log;
 
     client_max_body_size 1m;
 

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Капшук — гаманець-мішечок">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f3b4d"/>
+      <stop offset="1" stop-color="#132633"/>
+    </linearGradient>
+    <linearGradient id="cloth" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#f2b134"/>
+      <stop offset="1" stop-color="#d98324"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!-- тіло мішечка -->
+  <path fill="url(#cloth)"
+        d="M256 196c-64 0-104 34-128 78-22 40-30 84-8 118 26 40 82 56 136 56s110-16 136-56c22-34 14-78-8-118-24-44-64-78-128-78z"/>
+
+  <!-- складки тканини -->
+  <g stroke="#b86c1a" stroke-width="7" stroke-linecap="round" opacity="0.5" fill="none">
+    <path d="M196 250c-14 34-18 72-8 104"/>
+    <path d="M316 250c14 34 18 72 8 104"/>
+  </g>
+
+  <!-- горловина -->
+  <path fill="#e8a02c" d="M196 150h120c8 0 14 6 14 14v34c0 8-6 14-14 14H196c-8 0-14-6-14-14v-34c0-8 6-14 14-14z"/>
+
+  <!-- шнурок -->
+  <g stroke="#7a4a12" stroke-width="13" stroke-linecap="round" fill="none">
+    <path d="M176 178h160"/>
+    <path d="M176 178c-22-6-34-20-30-38"/>
+    <path d="M336 178c22-6 34-20 30-38"/>
+  </g>
+  <circle cx="146" cy="134" r="12" fill="#7a4a12"/>
+  <circle cx="366" cy="134" r="12" fill="#7a4a12"/>
+
+  <!-- гривня -->
+  <text x="256" y="372" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif"
+        font-size="150" font-weight="700" fill="#6b4410" opacity="0.88">₴</text>
+</svg>
