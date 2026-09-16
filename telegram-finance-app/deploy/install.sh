@@ -11,6 +11,7 @@ set -euo pipefail
 APP_USER="finance"
 APP_DIR="/opt/finance-app"
 PORT="8080"
+PORT_EXPLICIT="false"
 DOMAIN=""
 TOKEN=""
 ALLOW=""
@@ -27,7 +28,7 @@ while [[ $# -gt 0 ]]; do
     --email)  EMAIL="$2";  shift 2 ;;
     --user)   APP_USER="$2"; shift 2 ;;
     --dir)    APP_DIR="$2";  shift 2 ;;
-    --port)   PORT="$2";     shift 2 ;;
+    --port)   PORT="$2"; PORT_EXPLICIT="true"; shift 2 ;;
     --skip-tls) SKIP_TLS="true"; shift ;;
     --skip-build) SKIP_BUILD="true"; shift ;;
     --no-swap) NO_SWAP="true"; shift ;;
@@ -43,6 +44,99 @@ SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DATA_DIR="$APP_DIR/data"
 
 step() { printf '\n\033[1m▶ %s\033[0m\n' "$1"; }
+
+# --- перевірка, що ми нічого не зламаємо на вже зайнятому сервері -----------
+
+# Ім'я процесу, який слухає порт (ss → lsof → нічого). Порожньо = вільний або невідомий.
+port_owner() {
+  local port="$1"
+  if command -v ss >/dev/null 2>&1; then
+    ss -tlnp 2>/dev/null | awk -v p=":$port\$" '$4 ~ p {print; exit}' \
+      | sed -n 's/.*users:((\"\([^\"]*\)\".*/\1/p'
+  elif command -v lsof >/dev/null 2>&1; then
+    lsof -iTCP:"$port" -sTCP:LISTEN -Fc 2>/dev/null | sed -n 's/^c//p' | head -1
+  fi
+}
+
+# Чи зайнятий порт. Пробуємо ss, потім lsof, у крайньому разі — /proc.
+port_busy() {
+  local port="$1"
+  if command -v ss >/dev/null 2>&1; then
+    if ss -tln 2>/dev/null | awk -v p=":${port}$" '$4 ~ p {exit 0} END {exit 1}'; then return 0; fi
+    return 1
+  fi
+  if command -v lsof >/dev/null 2>&1; then
+    if lsof -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then return 0; fi
+    return 1
+  fi
+  local hex files=()
+  hex=$(printf ':%04X' "$port")
+  # Файли перелічуємо через if: під set -e конструкція `[[ ... ]] && ...` обірвала б скрипт,
+  # а неіснуючий /proc/net/tcp6 змусив би awk завершитись кодом 2 (і зайнятий порт здався б вільним)
+  if [[ -r /proc/net/tcp ]];  then files+=(/proc/net/tcp);  fi
+  if [[ -r /proc/net/tcp6 ]]; then files+=(/proc/net/tcp6); fi
+  if (( ${#files[@]} == 0 )); then return 1; fi
+  if awk -v h="$hex" '$4 == "0A" && $2 ~ h"$" {found = 1} END {exit !found}' "${files[@]}" 2>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
+step "Перевірка сервера"
+
+# 1. Локальний порт для uvicorn
+if port_busy "$PORT"; then
+  owner="$(port_owner "$PORT")"
+  if [[ "$PORT_EXPLICIT" == "true" ]]; then
+    echo "❌ Порт $PORT уже зайнятий${owner:+ (}${owner}${owner:+)}. Вибери інший через --port."
+    exit 1
+  fi
+  for candidate in $(seq 8081 8099); do
+    if ! port_busy "$candidate"; then
+      echo "   Порт $PORT зайнятий${owner:+ (}${owner}${owner:+)} — беру $candidate"
+      PORT="$candidate"
+      break
+    fi
+  done
+  if port_busy "$PORT"; then
+    echo "❌ Не знайшов вільного порту в діапазоні 8080-8099. Вкажи свій через --port."
+    exit 1
+  fi
+else
+  echo "   Порт $PORT вільний"
+fi
+
+# 2. Хто тримає 80-й: nginx нам підходить (просто додамо свій сайт), решта — конфлікт
+if [[ -n "$DOMAIN" ]]; then
+  web_owner="$(port_owner 80)"
+  case "$web_owner" in
+    ""|nginx)
+      if port_busy 80; then
+        echo "   80-й порт: nginx — додам ще один сайт, наявні не чіпаю"
+      else
+        echo "   80-й порт вільний"
+      fi
+      ;;
+    *)
+      cat <<CONFLICT
+❌ 80-й порт зайнятий процесом «$web_owner», а не nginx.
+
+   Установник не чіпатиме те, що вже працює. Варіанти:
+   1) Постав без Mini App (прибери --domain) — бот працюватиме однаково.
+   2) Пропиши проксі на 127.0.0.1:$PORT у своєму веб-сервері й запусти з --skip-tls.
+
+CONFLICT
+      exit 1
+      ;;
+  esac
+fi
+
+# 3. Чи не займе хтось уже наше ім'я служби
+for existing in finance-bot finance-api; do
+  if systemctl list-unit-files 2>/dev/null | grep -q "^$existing.service" && [[ ! -f "$APP_DIR/.env" ]]; then
+    echo "   ⚠️  Служба $existing вже є, але $APP_DIR порожній — перевір, чи це не інша установка"
+  fi
+done
 
 step "Пакети"
 export DEBIAN_FRONTEND=noninteractive
@@ -131,6 +225,8 @@ if [[ -f "$ENV_FILE" ]]; then
   if [[ -n "$TOKEN" ]];  then set_env_key BOT_TOKEN "$TOKEN"; fi
   if [[ -n "$ALLOW" ]];  then set_env_key ALLOWED_USERS "$ALLOW"; fi
   if [[ -n "$DOMAIN" ]]; then set_env_key WEBAPP_URL "https://$DOMAIN"; fi
+  # Порт міг змінитись автоматично через зайнятий 8080 — тримаємо .env і юніт в одному стані
+  if ! grep -q "^PORT=$PORT$" "$ENV_FILE"; then set_env_key PORT "$PORT"; fi
 else
   WEBAPP_URL=""
   if [[ -n "$DOMAIN" ]]; then WEBAPP_URL="https://$DOMAIN"; fi
@@ -166,6 +262,10 @@ if [[ -n "$DOMAIN" ]]; then systemctl enable --now finance-api.service; fi
 
 if [[ -n "$DOMAIN" ]]; then
   step "nginx для $DOMAIN"
+  if [[ -f /etc/nginx/sites-available/finance ]]; then
+    cp /etc/nginx/sites-available/finance "/etc/nginx/sites-available/finance.bak.$(date +%s)"
+    echo "   наявний конфіг збережено як finance.bak.*"
+  fi
   sed -e "s|__DOMAIN__|$DOMAIN|g" -e "s|__PORT__|$PORT|g" \
       "$SOURCE_DIR/deploy/nginx.conf.template" > /etc/nginx/sites-available/finance
   ln -sf /etc/nginx/sites-available/finance /etc/nginx/sites-enabled/finance
